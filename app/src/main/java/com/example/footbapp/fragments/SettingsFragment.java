@@ -1,4 +1,4 @@
-package com.example.footbapp;
+package com.example.footbapp.fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.footbapp.R;
 
 
 public class SettingsFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.example.footbapp;
+package com.example.footbapp.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.footbapp.R;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.TeamViewModel;
 
@@ -62,7 +63,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        supportFinishAfterTransition();
         return true;
     }
 
@@ -85,6 +86,8 @@ public class TeamOverviewActivity extends AppCompatActivity {
         locationTextView = findViewById(R.id.locationTextView);
         descriptionTextView = findViewById(R.id.descriptionTextView);
         favoriteButton = findViewById(R.id.favoriteFAB);
+
+        badgeImageView.setTransitionName(team.getTeamName());
 
         stadiumTextView.setText("Stadium name: " + team.getStadiumName());
         locationTextView.setText("Location: " + team.getLocation());

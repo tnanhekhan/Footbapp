@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.example.footbapp.model.Team;
 
-@Database(entities = Team.class, version = 1)
+@Database(entities = Team.class, version = 1, exportSchema = false)
 public abstract class TeamDatabase extends RoomDatabase {
 
     private static TeamDatabase instance;

@@ -38,7 +38,6 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
     @Override
     public void onBindViewHolder(@NonNull CompetitionAdapter.ViewHolder viewHolder, int i) {
         viewHolder.competitionTextView.setText(mCompetitions.get(i).getName());
-        viewHolder.competitionCountryTextView.setText(mCompetitions.get(i).getCountry());
         Glide.with(context).load(mCompetitions.get(i).getEmblemUrl()).into(viewHolder.competitionImageView);
     }
 
@@ -51,13 +50,11 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView competitionTextView;
         ImageView competitionImageView;
-        TextView competitionCountryTextView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             competitionTextView = itemView.findViewById(R.id.competitionNameTextView);
             competitionImageView = itemView.findViewById(R.id.competitionImageView);
-            competitionCountryTextView = itemView.findViewById(R.id.competitonCountryTextView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

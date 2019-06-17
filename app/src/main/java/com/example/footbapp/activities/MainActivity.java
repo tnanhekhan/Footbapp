@@ -1,4 +1,4 @@
-package com.example.footbapp;
+package com.example.footbapp.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import com.example.footbapp.R;
+import com.example.footbapp.fragments.CompetitionListFragment;
+import com.example.footbapp.fragments.FavoriteTeamFragment;
+import com.example.footbapp.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private final Fragment CompetitiveListFragment = new CompetitionListFragment();

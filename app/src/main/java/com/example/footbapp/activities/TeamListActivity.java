@@ -1,12 +1,17 @@
-package com.example.footbapp;
+package com.example.footbapp.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.footbapp.R;
 import com.example.footbapp.adapter.TeamAdapter;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.CompetitionListViewModel;
@@ -26,7 +31,7 @@ public class TeamListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_team);
+        setContentView(R.layout.activity_team_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
@@ -63,10 +68,16 @@ public class TeamListActivity extends AppCompatActivity {
 
         teamAdapter.setOnItemClickListener(new TeamAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Team team) {
+            public void onItemClick(Team team, String teamName, ImageView teamImageView) {
                 Intent intent = new Intent(TeamListActivity.this, TeamOverviewActivity.class);
                 intent.putExtra("team", team);
-                startActivity(intent);
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(
+                                TeamListActivity.this,
+                                teamImageView,
+                                teamName);
+
+                startActivity(intent, optionsCompat.toBundle());
             }
         });
     }

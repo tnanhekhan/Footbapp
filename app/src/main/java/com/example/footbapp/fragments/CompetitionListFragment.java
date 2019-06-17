@@ -1,4 +1,4 @@
-package com.example.footbapp;
+package com.example.footbapp.fragments;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.footbapp.R;
+import com.example.footbapp.activities.TeamListActivity;
 import com.example.footbapp.adapter.CompetitionAdapter;
 import com.example.footbapp.model.Competition;
 import com.example.footbapp.viewmodel.CompetitionListViewModel;
