@@ -74,7 +74,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
             }
         }
     }
-    
+
     private void initializeComponents() {
         setTitle(team.getTeamName());
 

@@ -1,14 +1,16 @@
 package com.example.footbapp;
 
+
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.footbapp.adapter.CompetitionAdapter;
@@ -18,51 +20,37 @@ import com.example.footbapp.viewmodel.CompetitionListViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompetitionListActivity extends AppCompatActivity {
-    private TextView mTextMessage;
+
+public class CompetitionListFragment extends Fragment {
+    private TextView message;
     private CompetitionListViewModel viewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
+    public CompetitionListFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_competition_list, container, false);
+    }
 
-        mTextMessage = findViewById(R.id.message);
-        competitionsRv = findViewById(R.id.competitionsRv);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        message = getActivity().findViewById(R.id.competitionListMessage);
+
+
+        competitionsRv = getActivity().findViewById(R.id.competitionsRv);
 
         competitions = new ArrayList<>();
 
-
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewModel = ViewModelProviders.of(this).get(CompetitionListViewModel.class);
 
         loadCompetitions();
-
 
     }
 
@@ -80,12 +68,12 @@ public class CompetitionListActivity extends AppCompatActivity {
     public void populateRecyclerView() {
         competitionAdapter = new CompetitionAdapter(filterList());
         competitionsRv.setAdapter(competitionAdapter);
-        competitionsRv.setLayoutManager(new LinearLayoutManager(this));
+        competitionsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         competitionAdapter.setOnItemClickListener(new CompetitionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Competition competition) {
-                Intent intent = new Intent(CompetitionListActivity.this, TeamListActivity.class);
+                Intent intent = new Intent(getActivity(), TeamListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", competition.getId());
                 bundle.putString("name", competition.getName());
@@ -104,5 +92,4 @@ public class CompetitionListActivity extends AppCompatActivity {
         }
         return filteredList;
     }
-
 }
