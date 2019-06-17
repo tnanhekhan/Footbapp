@@ -6,21 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import com.example.footbapp.adapter.TeamAdapter;
 import com.example.footbapp.model.Team;
-import com.example.footbapp.viewmodel.MainActivityViewModel;
+import com.example.footbapp.viewmodel.CompetitionListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TeamActivity extends AppCompatActivity {
+public class TeamListActivity extends AppCompatActivity {
     private List<Team> teams;
     private RecyclerView teamsRv;
     private TeamAdapter teamAdapter;
-    private MainActivityViewModel viewModel;
+    private CompetitionListViewModel viewModel;
     private int id;
 
 
@@ -43,7 +42,7 @@ public class TeamActivity extends AppCompatActivity {
         teamsRv.setAdapter(teamAdapter);
         teamsRv.setLayoutManager(new LinearLayoutManager(this));
 
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(CompetitionListViewModel.class);
 
         loadTeams(String.valueOf(id));
     }
@@ -65,7 +64,7 @@ public class TeamActivity extends AppCompatActivity {
         teamAdapter.setOnItemClickListener(new TeamAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Team team) {
-                Intent intent = new Intent(TeamActivity.this, TeamOverviewActivity.class);
+                Intent intent = new Intent(TeamListActivity.this, TeamOverviewActivity.class);
                 intent.putExtra("team", team);
                 startActivity(intent);
             }

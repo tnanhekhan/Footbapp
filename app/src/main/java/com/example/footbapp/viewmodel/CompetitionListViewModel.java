@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivityViewModel extends AndroidViewModel {
+public class CompetitionListViewModel extends AndroidViewModel {
     private FootballRepository footballRepository = new FootballRepository();
     private TheSportsDbRepository theSportsDbRepository = new TheSportsDbRepository();
 
@@ -23,7 +23,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private MutableLiveData<String> error = new MutableLiveData<>();
 
-    public MainActivityViewModel(@NonNull Application application) {
+    public CompetitionListViewModel(@NonNull Application application) {
         super(application);
     }
 

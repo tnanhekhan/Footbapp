@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 import com.example.footbapp.adapter.CompetitionAdapter;
 import com.example.footbapp.model.Competition;
-import com.example.footbapp.viewmodel.MainActivityViewModel;
+import com.example.footbapp.viewmodel.CompetitionListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class CompetitionListActivity extends AppCompatActivity {
     private TextView mTextMessage;
-    private MainActivityViewModel viewModel;
+    private CompetitionListViewModel viewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(CompetitionListViewModel.class);
 
         loadCompetitions();
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         competitionAdapter.setOnItemClickListener(new CompetitionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Competition competition) {
-                Intent intent = new Intent(MainActivity.this, TeamActivity.class);
+                Intent intent = new Intent(CompetitionListActivity.this, TeamListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", competition.getId());
                 bundle.putString("name", competition.getName());

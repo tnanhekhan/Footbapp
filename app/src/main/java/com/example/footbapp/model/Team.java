@@ -1,12 +1,16 @@
 package com.example.footbapp.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "favorite_team")
 public class Team implements Parcelable {
+    @PrimaryKey
     private int idTeam;
     @SerializedName("strTeam")
     @Expose
@@ -35,6 +39,16 @@ public class Team implements Parcelable {
     @SerializedName("strTeamJersey")
     private String kitImage;
 
+    public Team(int idTeam, String teamName, String badgePath, String location, String stadiumName, String stadiumImage, String description, String kitImage) {
+        this.idTeam = idTeam;
+        this.teamName = teamName;
+        this.badgePath = badgePath;
+        this.location = location;
+        this.stadiumName = stadiumName;
+        this.stadiumImage = stadiumImage;
+        this.description = description;
+        this.kitImage = kitImage;
+    }
 
     public int getIdTeam() {
         return idTeam;
