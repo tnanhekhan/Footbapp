@@ -1,7 +1,7 @@
 package com.example.footbapp.api;
 
-import com.example.footbapp.model.Competition;
 import com.example.footbapp.model.CompetitionResource;
+import com.example.footbapp.model.EventResource;
 import com.example.footbapp.model.TeamResource;
 
 import retrofit2.Call;
@@ -15,4 +15,7 @@ public interface TheSportsDbService {
 
     @GET("lookup_all_teams.php")
     Call<TeamResource>getCompetitionById(@Query("id") String competitionId);
+
+    @GET("eventsnext.php")
+    Call<EventResource> getEventsById(@Query("id") String teamId);
 }

@@ -38,7 +38,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TeamAdapter.ViewHolder viewHolder, int i) {
         viewHolder.teamTextView.setText(mTeams.get(i).getTeamName());
-        Glide.with(context).load(mTeams.get(i).getBadgePath()).into(viewHolder.teamImageView);
+        Glide.with(context).load(mTeams.get(i).getBadgePath()).placeholder(R.drawable.ic_soccer_ball).into(viewHolder.teamImageView);
 
         viewHolder.teamImageView.setTransitionName(mTeams.get(i).getTeamName());
     }

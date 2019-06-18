@@ -1,6 +1,7 @@
 package com.example.footbapp.api;
 
 import com.example.footbapp.model.CompetitionResource;
+import com.example.footbapp.model.EventResource;
 import com.example.footbapp.model.TeamResource;
 
 import retrofit2.Call;
@@ -14,5 +15,9 @@ public class TheSportsDbRepository {
 
     public Call<TeamResource> getCompetitionById(String competitionId) {
         return theSportsDbService.getCompetitionById(competitionId);
+    }
+
+    public Call<EventResource> getEventsById(String teamId) {
+        return theSportsDbService.getEventsById(teamId);
     }
 }

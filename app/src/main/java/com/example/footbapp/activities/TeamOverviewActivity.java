@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.footbapp.R;
 import com.example.footbapp.model.Team;
-import com.example.footbapp.viewmodel.TeamViewModel;
+import com.example.footbapp.viewmodel.RoomViewModel;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
     private TextView stadiumTextView;
     private TextView locationTextView;
     private TextView descriptionTextView;
-    private TeamViewModel teamViewModel;
+    private RoomViewModel roomViewModel;
     private FloatingActionButton favoriteButton;
     private boolean favorited = false;
 
@@ -51,12 +51,12 @@ public class TeamOverviewActivity extends AppCompatActivity {
             }
         }, 500);
 
-        teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
-        teamViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
+        roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
+        roomViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
                 checkDatabase(teams);
-                Toast.makeText(TeamOverviewActivity.this, "Data changed - Number of teams in db: " + teamViewModel.getAllFavoriteTeams().getValue().size(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TeamOverviewActivity.this, "Data changed - Number of teams in db: " + roomViewModel.getAllFavoriteTeams().getValue().size(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -102,11 +102,11 @@ public class TeamOverviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (favorited) {
-                    teamViewModel.delete(team);
+                    roomViewModel.delete(team);
                     Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " deleted from favorite teams!", Toast.LENGTH_SHORT).show();
                     favoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 } else {
-                    teamViewModel.insert(team);
+                    roomViewModel.insert(team);
                     Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " stored as favorite team!", Toast.LENGTH_SHORT).show();
                     favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
                 }

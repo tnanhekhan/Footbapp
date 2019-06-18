@@ -17,7 +17,7 @@ import com.example.footbapp.R;
 import com.example.footbapp.activities.TeamListActivity;
 import com.example.footbapp.adapter.CompetitionAdapter;
 import com.example.footbapp.model.Competition;
-import com.example.footbapp.viewmodel.CompetitionListViewModel;
+import com.example.footbapp.viewmodel.ApiViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CompetitionListFragment extends Fragment {
     private TextView message;
-    private CompetitionListViewModel viewModel;
+    private ApiViewModel apiViewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
@@ -50,20 +50,20 @@ public class CompetitionListFragment extends Fragment {
 
         competitions = new ArrayList<>();
 
-        viewModel = ViewModelProviders.of(this).get(CompetitionListViewModel.class);
+        apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
         loadCompetitions();
 
     }
 
     private void loadCompetitions() {
-        viewModel.getCompetitionResource().observe(this, competitionResource -> {
+        apiViewModel.getCompetitionResource().observe(this, competitionResource -> {
             competitions.clear();
             competitions = competitionResource.getCompetitions();
             System.out.println(competitions);
             populateRecyclerView();
         });
-        viewModel.getCompetitions();
+        apiViewModel.getCompetitions();
     }
 
 

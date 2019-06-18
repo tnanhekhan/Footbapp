@@ -10,11 +10,11 @@ import com.example.footbapp.repository.TeamRepository;
 
 import java.util.List;
 
-public class TeamViewModel extends AndroidViewModel {
+public class RoomViewModel extends AndroidViewModel {
     private TeamRepository teamRepository;
     private LiveData<List<Team>> allTeams;
 
-    public TeamViewModel(@NonNull Application application) {
+    public RoomViewModel(@NonNull Application application) {
         super(application);
         teamRepository = new TeamRepository(application);
         allTeams = teamRepository.getAllFavoriteTeams();

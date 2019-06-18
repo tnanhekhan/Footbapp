@@ -5,7 +5,7 @@ import java.util.List;
 public class CompetitionResource {
     private List<Competition> countrys;
 
-    public CompetitionResource(int count, List countrys) {
+    public CompetitionResource( List countrys) {
         this.countrys = countrys;
     }
 

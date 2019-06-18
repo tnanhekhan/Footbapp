@@ -5,7 +5,7 @@ import java.util.List;
 public class TeamResource {
     private List<Team> teams;
 
-    public TeamResource(int count, List teams) {
+    public TeamResource(List teams) {
         this.teams = teams;
     }
 

@@ -7,14 +7,12 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.footbapp.R;
 import com.example.footbapp.adapter.TeamAdapter;
 import com.example.footbapp.model.Team;
-import com.example.footbapp.viewmodel.CompetitionListViewModel;
+import com.example.footbapp.viewmodel.ApiViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class TeamListActivity extends AppCompatActivity {
     private List<Team> teams;
     private RecyclerView teamsRv;
     private TeamAdapter teamAdapter;
-    private CompetitionListViewModel viewModel;
+    private ApiViewModel viewModel;
     private int id;
 
 
@@ -47,7 +45,7 @@ public class TeamListActivity extends AppCompatActivity {
         teamsRv.setAdapter(teamAdapter);
         teamsRv.setLayoutManager(new LinearLayoutManager(this));
 
-        viewModel = ViewModelProviders.of(this).get(CompetitionListViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
         loadTeams(String.valueOf(id));
     }
