@@ -40,6 +40,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         viewHolder.eventDateTextView.setText(events.get(i).getStrDate());
         viewHolder.eventHomeTeamTextView.setText(events.get(i).getStrHomeTeam());
         viewHolder.eventAwayTeamTextView.setText(events.get(i).getStrAwayTeam());
+        if(events.get(i).getStrDate() == null){
+            viewHolder.notificationIconImageView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
