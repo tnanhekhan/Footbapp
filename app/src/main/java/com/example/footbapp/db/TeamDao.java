@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.footbapp.model.Team;
 
@@ -18,6 +19,9 @@ public interface TeamDao {
 
     @Delete
     void delete(Team team);
+
+    @Update
+    void update(Team team);
 
     @Query("DELETE FROM favorite_team")
     void deleteAllFavoriteTeams();

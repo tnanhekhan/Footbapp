@@ -28,6 +28,10 @@ public class RoomViewModel extends AndroidViewModel {
         teamRepository.delete(team);
     }
 
+    public void update(Team team) {
+        teamRepository.update(team);
+    }
+
     public void deleteAllFavoriteTeams() {
         teamRepository.deleteAllFavoriteTeams();
     }
