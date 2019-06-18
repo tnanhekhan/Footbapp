@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.footbapp.R;
@@ -18,22 +19,27 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private Context context;
     private OnItemClickListener listener;
 
+    public EventAdapter(List<Event> events) {
+        this.events = events;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.event_row, null);
-        ViewHolder viewHolder = new ViewHolder(view);
+        EventAdapter.ViewHolder viewHolder = new EventAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.homeTeamTextView.setText(events.get(i).getStrHomeTeam());
-        viewHolder.awayTeamTextView.setText(events.get(i).getStrAwayTeam());
-        viewHolder.dateTextView.setText(events.get(i).getStrDate());
-        viewHolder.timeTextView.setText(events.get(i).getStrTime());
+        viewHolder.eventLeagueTextView.setText(events.get(i).getStrLeague());
+        viewHolder.eventTimeTextView.setText(events.get(i).getStrTime());
+        viewHolder.eventDateTextView.setText(events.get(i).getStrDate());
+        viewHolder.eventHomeTeamTextView.setText(events.get(i).getStrHomeTeam());
+        viewHolder.eventAwayTeamTextView.setText(events.get(i).getStrAwayTeam());
     }
 
     @Override
@@ -42,18 +48,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView homeTeamTextView;
-        TextView awayTeamTextView;
-        TextView dateTextView;
-        TextView timeTextView;
-
+        TextView eventLeagueTextView;
+        TextView eventTimeTextView;
+        TextView eventDateTextView;
+        TextView eventHomeTeamTextView;
+        TextView eventAwayTeamTextView;
+        ImageView notificationIconImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            homeTeamTextView = itemView.findViewById(R.id.homeTeamTextView);
-            awayTeamTextView = itemView.findViewById(R.id.awayTeamTextView);
-            dateTextView = itemView.findViewById(R.id.dateTextView);
-            timeTextView = itemView.findViewById(R.id.teamTextView);
+
+            eventLeagueTextView = itemView.findViewById(R.id.eventLeagueTextView);
+            eventTimeTextView = itemView.findViewById(R.id.eventTimeTextView);
+            eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
+            eventHomeTeamTextView = itemView.findViewById(R.id.eventHomeTeamTextView);
+            eventAwayTeamTextView = itemView.findViewById(R.id.eventAwayTeamTextView);
+            notificationIconImageView = itemView.findViewById(R.id.notificationIconImageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,15 +75,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     }
                 }
             });
+
         }
     }
 
-    private interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClick(Event event);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 }

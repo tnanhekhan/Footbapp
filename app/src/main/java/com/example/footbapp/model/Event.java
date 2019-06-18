@@ -22,6 +22,8 @@ public class Event {
     private String idHomeTeam;
     @Expose
     private String idAwayTeam;
+    @Expose
+    private String strLeague;
 
     public int getIdEvent() {
         return idEvent;
@@ -93,5 +95,13 @@ public class Event {
 
     public void setIdAwayTeam(String idAwayTeam) {
         this.idAwayTeam = idAwayTeam;
+    }
+
+    public String getStrLeague() {
+        return strLeague;
+    }
+
+    public void setStrLeague(String strLeague) {
+        this.strLeague = strLeague;
     }
 }

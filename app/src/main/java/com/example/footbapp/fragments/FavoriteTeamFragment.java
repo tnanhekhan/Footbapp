@@ -2,6 +2,7 @@ package com.example.footbapp.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.footbapp.R;
+import com.example.footbapp.activities.EventListActivity;
 import com.example.footbapp.adapter.FavoriteTeamAdapter;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.ApiViewModel;
@@ -24,7 +27,6 @@ public class FavoriteTeamFragment extends Fragment {
     private RoomViewModel roomViewModel;
     private ApiViewModel apiViewModel;
     private RecyclerView favoriteTeamsRv;
-    private RecyclerView eventRv;
     private FavoriteTeamAdapter favoriteTeamAdapter;
 
 
@@ -54,6 +56,16 @@ public class FavoriteTeamFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
                 favoriteTeamAdapter.setFavoriteTeams(teams);
+            }
+        });
+
+        favoriteTeamAdapter.setOnItemClickListener(new FavoriteTeamAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Team team, String teamName, ImageView imageView) {
+                Intent intent = new Intent(getActivity(), EventListActivity.class);
+                intent.putExtra("team", team);
+
+                startActivity(intent);
             }
         });
 

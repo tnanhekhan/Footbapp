@@ -35,15 +35,10 @@ public class TeamListActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getInt("id");
 
-
         teamsRv = findViewById(R.id.teamsRv);
 
         teams = new ArrayList<>();
         setTitle(bundle.getString("name"));
-
-        teamAdapter = new TeamAdapter(teams);
-        teamsRv.setAdapter(teamAdapter);
-        teamsRv.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
@@ -59,7 +54,7 @@ public class TeamListActivity extends AppCompatActivity {
         viewModel.getCompetitionById(id);
     }
 
-    public void populateRecyclerView() {
+    private void populateRecyclerView() {
         teamAdapter = new TeamAdapter(teams);
         teamsRv.setAdapter(teamAdapter);
         teamsRv.setLayoutManager(new LinearLayoutManager(this));
