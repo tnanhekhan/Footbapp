@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,16 +15,19 @@ import com.bumptech.glide.Glide;
 import com.example.footbapp.R;
 import com.example.footbapp.model.Team;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
+public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> implements Filterable {
     private List<Team> mTeams;
+    private List<Team> teamListFull;
     private Context context;
     private OnItemClickListener listener;
 
 
     public TeamAdapter(List<Team> mTeams) {
         this.mTeams = mTeams;
+        teamListFull = new ArrayList<>(mTeams);
     }
 
     @NonNull
@@ -57,6 +62,39 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
     public int getItemViewType(int position) {
         return position;
     }
+
+    @Override
+    public Filter getFilter() {
+        return teamFilter;
+    }
+
+    private Filter teamFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Team> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(teamListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Team team : teamListFull) {
+                    if (team.getTeamName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(team);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mTeams.clear();
+            mTeams.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     class ViewHolder extends RecyclerView.ViewHolder {

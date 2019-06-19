@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,16 +15,19 @@ import com.bumptech.glide.Glide;
 import com.example.footbapp.R;
 import com.example.footbapp.model.Competition;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.ViewHolder> {
+public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.ViewHolder> implements Filterable {
     private List<Competition> mCompetitions;
+    private List<Competition> competitionsListFull;
     private Context context;
     private OnItemClickListener listener;
 
 
     public CompetitionAdapter(List<Competition> mCompetitions) {
         this.mCompetitions = mCompetitions;
+        competitionsListFull = new ArrayList<>(mCompetitions);
     }
 
     @NonNull
@@ -45,6 +50,39 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
     public int getItemCount() {
         return mCompetitions.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return competitionFilter;
+    }
+
+    private Filter competitionFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Competition> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(competitionsListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Competition competition : competitionsListFull) {
+                    if (competition.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(competition);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mCompetitions.clear();
+            mCompetitions.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
