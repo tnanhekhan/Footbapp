@@ -26,7 +26,7 @@ import java.util.List;
 
 
 public class CompetitionListFragment extends Fragment {
-    private TextView message;
+    public final String FILTERED_COMP = "Colombia Categoría Primera A";
     private ApiViewModel apiViewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
@@ -46,7 +46,6 @@ public class CompetitionListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        message = getActivity().findViewById(R.id.competitionListMessage);
 
         progressBar = getActivity().findViewById(R.id.competitionListProgressBar);
 
@@ -106,7 +105,7 @@ public class CompetitionListFragment extends Fragment {
     public List<Competition> filterList() {
         List<Competition> filteredList = new ArrayList<>();
         for (int i = 0; i < competitions.size(); i++) {
-            if (competitions.get(i).getCompCheck() != 1) {
+            if (competitions.get(i).getCompCheck() != 1 && !competitions.get(i).getName().equals(FILTERED_COMP)) {
                 filteredList.add(competitions.get(i));
             }
         }

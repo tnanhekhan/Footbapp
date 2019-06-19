@@ -8,11 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.footbapp.R;
 import com.example.footbapp.adapter.TeamAdapter;
@@ -30,6 +30,7 @@ public class TeamListActivity extends AppCompatActivity {
     private ApiViewModel viewModel;
     private int id;
     private ProgressBar progressBar;
+    private String competitionName;
 
 
     @Override
@@ -45,7 +46,8 @@ public class TeamListActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.teamListProgressBar);
 
         teams = new ArrayList<>();
-        setTitle(bundle.getString("name"));
+        competitionName = bundle.getString("name");
+        setTitle(competitionName);
 
         viewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
@@ -69,8 +71,14 @@ public class TeamListActivity extends AppCompatActivity {
     private void loadTeams(String id) {
         viewModel.getTeamResource().observe(this, teamResource -> {
             teams.clear();
-            teams = teamResource.getTeams();
-            populateRecyclerView();
+            if (teamResource != null) {
+                teams = teamResource.getTeams();
+                populateRecyclerView();
+            } else {
+                Toast.makeText(TeamListActivity.this,
+                        "No events available for " + competitionName + "!",
+                        Toast.LENGTH_SHORT).show();
+            }
         });
         viewModel.getCompetitionById(id);
     }

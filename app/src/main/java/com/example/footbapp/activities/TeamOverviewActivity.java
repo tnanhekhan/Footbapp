@@ -58,7 +58,6 @@ public class TeamOverviewActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
                 checkDatabase(teams);
-                Toast.makeText(TeamOverviewActivity.this, "Data changed - Number of teams in db: " + roomViewModel.getAllFavoriteTeams().getValue().size(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -114,7 +113,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
                     favoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 } else {
                     roomViewModel.insert(team);
-                    Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " stored as favorite team!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " stored as a favorite team!", Toast.LENGTH_SHORT).show();
                     favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
                 }
             }
