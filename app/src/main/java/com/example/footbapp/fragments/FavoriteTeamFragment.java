@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.example.footbapp.R;
 import com.example.footbapp.activities.EventListActivity;
@@ -32,9 +32,9 @@ public class FavoriteTeamFragment extends Fragment {
     private RoomViewModel roomViewModel;
     private ApiViewModel apiViewModel;
     private RecyclerView favoriteTeamsRv;
+    private RecyclerView subscribedEventsRv;
     private FavoriteTeamAdapter favoriteTeamAdapter;
-
-
+    private TabLayout favoriteTeamTabLayout;
     public FavoriteTeamFragment() {
     }
 
@@ -50,12 +50,37 @@ public class FavoriteTeamFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         favoriteTeamsRv = getActivity().findViewById(R.id.favoriteTeamsRv);
+        subscribedEventsRv = getActivity().findViewById(R.id.subscribedEventsRv);
 
-        favoriteTeamAdapter = new FavoriteTeamAdapter();
+
+        favoriteTeamTabLayout = getActivity().findViewById(R.id.favoriteTeamTabLayout);
 
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
-
         loadFavoriteTeams();
+
+        favoriteTeamTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        favoriteTeamsRv.setVisibility(View.VISIBLE);
+                        System.out.println("FAVORITE TEAMS");
+                        break;
+                    case 1:
+                        favoriteTeamsRv.setVisibility(View.INVISIBLE);
+                        System.out.println("SUBSCRIBED EVENTS");
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
     }
 
@@ -63,7 +88,7 @@ public class FavoriteTeamFragment extends Fragment {
         roomViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
-                favoriteTeamAdapter.setFavoriteTeams(teams);
+                favoriteTeamAdapter = new FavoriteTeamAdapter(teams);
                 populateRecyclerView();
 
             }

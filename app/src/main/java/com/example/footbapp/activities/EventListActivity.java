@@ -87,10 +87,18 @@ public class EventListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Event event, ImageView notificationIcon) {
                 if (event.getStrDate() != null) {
-                    notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
-                    Toast.makeText(EventListActivity.this,
-                            "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
-                            Toast.LENGTH_SHORT).show();
+                    //TO DO: IMPLEMENT ONCLICK NOTIFCATION
+                    if(notificationIcon.getDrawable() == getDrawable(R.drawable.ic_notifications_off_black_24dp)){
+                        notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
+                        Toast.makeText(EventListActivity.this,
+                                "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                                Toast.LENGTH_SHORT).show();
+                    }else if(notificationIcon.getDrawable() == getDrawable(R.drawable.ic_notifications_black_24dp)){
+                        notificationIcon.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+                        Toast.makeText(EventListActivity.this,
+                                "Unsubscribed from " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -103,4 +111,9 @@ public class EventListActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

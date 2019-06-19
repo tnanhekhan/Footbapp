@@ -50,6 +50,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.size();
     }
 
+    public Event getEventAt(int position) {
+        return events.get(position);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView eventLeagueTextView;
         TextView eventTimeTextView;

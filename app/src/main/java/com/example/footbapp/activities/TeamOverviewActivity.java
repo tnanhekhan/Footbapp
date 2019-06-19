@@ -73,6 +73,12 @@ public class TeamOverviewActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        supportFinishAfterTransition();;
+    }
+
     public void checkDatabase(List<Team> teams) {
         for (int i = 0; i < teams.size(); i++) {
             if (teams.get(i).getIdTeam() == team.getIdTeam()) {

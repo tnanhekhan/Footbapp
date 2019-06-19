@@ -20,6 +20,9 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
     private OnItemClickListener listener;
     private Context context;
 
+    public FavoriteTeamAdapter(List<Team> favoriteTeams) {
+        this.favoriteTeams = favoriteTeams;
+    }
 
     @NonNull
     @Override
@@ -41,12 +44,6 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
     @Override
     public int getItemCount() {
         return favoriteTeams.size();
-    }
-
-
-    public void setFavoriteTeams(List<Team> favoriteTeams) {
-        this.favoriteTeams = favoriteTeams;
-        notifyDataSetChanged();
     }
 
     public Team getTeamAt(int position) {
