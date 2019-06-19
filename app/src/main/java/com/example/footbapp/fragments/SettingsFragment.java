@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.footbapp.R;
+import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
+import com.example.footbapp.viewmodel.EventViewModel;
 import com.example.footbapp.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class SettingsFragment extends Fragment {
     private Button deleteEventsButton;
     private Button clearFavoriteTeamButton;
     private TeamViewModel teamViewModel;
+    private EventViewModel eventViewModel;
 
 
     public SettingsFragment() {
@@ -45,7 +48,13 @@ public class SettingsFragment extends Fragment {
         clearFavoriteTeamButton = getActivity().findViewById(R.id.clearFavoriteTeamButton);
 
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
 
+        setOnClickButtons();
+
+    }
+
+    private void setOnClickButtons() {
         clearFavoriteTeamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,5 +84,33 @@ public class SettingsFragment extends Fragment {
 
         });
 
+        deleteEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final List<Event> subscribedEventsBackup = new ArrayList<>();
+
+                eventViewModel.getAllSubscribedEvents().observe(SettingsFragment.this, new Observer<List<Event>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Event> events) {
+                        for (int i = 0; i < events.size(); i++) {
+                            subscribedEventsBackup.add(i, events.get(i));
+
+                        }
+                    }
+                });
+
+                eventViewModel.deletAllSubscribedEvents();
+
+                Snackbar.make(v, "Cleared all subscribed events!", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                for (int i = 0; i < subscribedEventsBackup.size(); i++) {
+                                    eventViewModel.insert(subscribedEventsBackup.get(i));
+                                }
+                            }
+                        }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
+            }
+        });
     }
 }

@@ -77,12 +77,10 @@ public class FavoriteTeamFragment extends Fragment {
                     case 0:
                         favoriteTeamsRv.setVisibility(View.VISIBLE);
                         subscribedEventsRv.setVisibility(View.INVISIBLE);
-                        System.out.println("FAVORITE TEAMS");
                         break;
                     case 1:
                         favoriteTeamsRv.setVisibility(View.INVISIBLE);
                         subscribedEventsRv.setVisibility(View.VISIBLE);
-                        System.out.println("SUBSCRIBED EVENTS");
                         break;
                 }
             }
