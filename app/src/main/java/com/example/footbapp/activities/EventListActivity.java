@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.footbapp.R;
 import com.example.footbapp.adapter.EventAdapter;
@@ -39,7 +41,6 @@ public class EventListActivity extends AppCompatActivity {
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
         loadEvents(String.valueOf(team.getIdTeam()));
-
     }
 
     private void loadEvents(String id) {
@@ -61,8 +62,13 @@ public class EventListActivity extends AppCompatActivity {
 
         eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Event event) {
-                System.out.println("BOGO");
+            public void onItemClick(Event event, ImageView notificationIcon) {
+                if (event.getStrDate() != null) {
+                    notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
+                    Toast.makeText(EventListActivity.this,
+                            "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

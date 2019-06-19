@@ -25,6 +25,7 @@ public class Event {
     @Expose
     private String strLeague;
 
+
     public int getIdEvent() {
         return idEvent;
     }

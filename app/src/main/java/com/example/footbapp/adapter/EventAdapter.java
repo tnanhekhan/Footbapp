@@ -74,7 +74,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     int position = getAdapterPosition();
 
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(events.get(position));
+                        listener.onItemClick(events.get(position), notificationIconImageView);
                     }
                 }
             });
@@ -83,7 +83,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Event event);
+        void onItemClick(Event event, ImageView notificationIcon);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
