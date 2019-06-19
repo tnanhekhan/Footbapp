@@ -5,14 +5,16 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
 
-@Database(entities = Team.class, version = 1, exportSchema = false)
+@Database(entities = {Team.class, Event.class}, version = 1, exportSchema = false)
 public abstract class TeamDatabase extends RoomDatabase {
 
     private static TeamDatabase instance;
 
     public abstract TeamDao teamDao();
+    public abstract EventDao eventDao();
 
     public static synchronized TeamDatabase getInstance(Context context) {
         if (instance == null) {

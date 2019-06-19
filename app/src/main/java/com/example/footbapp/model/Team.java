@@ -4,14 +4,16 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "favorite_team")
 public class Team implements Parcelable {
+    @NonNull
     @PrimaryKey
-    private int idTeam;
+    private String idTeam;
     @SerializedName("strTeam")
     @Expose
     private String teamName;
@@ -39,7 +41,7 @@ public class Team implements Parcelable {
     @SerializedName("strTeamJersey")
     private String kitImage;
 
-    public Team(int idTeam, String teamName, String badgePath, String location, String stadiumName, String stadiumImage, String description, String kitImage) {
+    public Team(String idTeam, String teamName, String badgePath, String location, String stadiumName, String stadiumImage, String description, String kitImage) {
         this.idTeam = idTeam;
         this.teamName = teamName;
         this.badgePath = badgePath;
@@ -50,11 +52,11 @@ public class Team implements Parcelable {
         this.kitImage = kitImage;
     }
 
-    public int getIdTeam() {
+    public String getIdTeam() {
         return idTeam;
     }
 
-    public void setIdTeam(int idTeam) {
+    public void setIdTeam(String idTeam) {
         this.idTeam = idTeam;
     }
 
@@ -121,7 +123,7 @@ public class Team implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(idTeam);
+        dest.writeString(idTeam);
         dest.writeString(teamName);
         dest.writeString(badgePath);
         dest.writeString(location);
@@ -132,7 +134,7 @@ public class Team implements Parcelable {
     }
 
     public Team(Parcel in) {
-        idTeam = in.readInt();
+        idTeam = in.readString();
         teamName = in.readString();
         badgePath = in.readString();
         location = in.readString();

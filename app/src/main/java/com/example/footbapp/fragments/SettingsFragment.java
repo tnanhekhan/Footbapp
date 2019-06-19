@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import android.widget.Button;
 
 import com.example.footbapp.R;
 import com.example.footbapp.model.Team;
-import com.example.footbapp.viewmodel.RoomViewModel;
+import com.example.footbapp.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 public class SettingsFragment extends Fragment {
     private Button deleteEventsButton;
     private Button clearFavoriteTeamButton;
-    private RoomViewModel roomViewModel;
+    private TeamViewModel teamViewModel;
 
 
     public SettingsFragment() {
@@ -45,14 +44,14 @@ public class SettingsFragment extends Fragment {
         deleteEventsButton = getActivity().findViewById(R.id.deleteEventsButton);
         clearFavoriteTeamButton = getActivity().findViewById(R.id.clearFavoriteTeamButton);
 
-        roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
+        teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
 
         clearFavoriteTeamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final List<Team> favoriteTeamsBackup = new ArrayList<>();
 
-                roomViewModel.getAllFavoriteTeams().observe(SettingsFragment.this, new Observer<List<Team>>() {
+                teamViewModel.getAllFavoriteTeams().observe(SettingsFragment.this, new Observer<List<Team>>() {
                     @Override
                     public void onChanged(@Nullable List<Team> teams) {
                         for (int i = 0; i < teams.size(); i++) {
@@ -61,14 +60,14 @@ public class SettingsFragment extends Fragment {
                     }
                 });
 
-                roomViewModel.deleteAllFavoriteTeams();
+                teamViewModel.deleteAllFavoriteTeams();
 
                 Snackbar.make(v, "Cleared all favorite teams!", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 for (int i = 0; i < favoriteTeamsBackup.size(); i++) {
-                                    roomViewModel.insert(favoriteTeamsBackup.get(i));
+                                    teamViewModel.insert(favoriteTeamsBackup.get(i));
                                 }
                             }
                         }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();

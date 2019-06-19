@@ -1,9 +1,21 @@
 package com.example.footbapp.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 
-public class Event {
+import java.io.Serializable;
 
+@Entity(tableName = "subscribed_event", foreignKeys = @ForeignKey(entity = Team.class,
+        parentColumns = "idTeam",
+        childColumns = "idTeam",
+        onDelete = ForeignKey.CASCADE), indices = {@Index("idTeam")})
+public class Event implements Serializable {
+
+    @PrimaryKey
     @Expose
     private int idEvent;
     @Expose
@@ -15,7 +27,7 @@ public class Event {
     @Expose
     private String strAwayTeam;
     @Expose
-    private String strDate;
+    private String dateEvent;
     @Expose
     private String strTime;
     @Expose
@@ -25,6 +37,9 @@ public class Event {
     @Expose
     private String strLeague;
 
+    private boolean subscribed;
+
+    private String idTeam;
 
     public int getIdEvent() {
         return idEvent;
@@ -66,12 +81,12 @@ public class Event {
         this.strAwayTeam = strAwayTeam;
     }
 
-    public String getStrDate() {
-        return strDate;
+    public String getDateEvent() {
+        return dateEvent;
     }
 
-    public void setStrDate(String strDate) {
-        this.strDate = strDate;
+    public void setDateEvent(String dateEvent) {
+        this.dateEvent = dateEvent;
     }
 
     public String getStrTime() {
@@ -104,5 +119,21 @@ public class Event {
 
     public void setStrLeague(String strLeague) {
         this.strLeague = strLeague;
+    }
+
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
+    }
+
+    public String getIdTeam() {
+        return idTeam;
+    }
+
+    public void setIdTeam(String idTeam) {
+        this.idTeam = idTeam;
     }
 }

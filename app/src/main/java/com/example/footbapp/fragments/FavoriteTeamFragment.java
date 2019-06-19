@@ -20,21 +20,30 @@ import android.widget.ImageView;
 
 import com.example.footbapp.R;
 import com.example.footbapp.activities.EventListActivity;
+import com.example.footbapp.adapter.EventAdapter;
 import com.example.footbapp.adapter.FavoriteTeamAdapter;
+import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.ApiViewModel;
-import com.example.footbapp.viewmodel.RoomViewModel;
+import com.example.footbapp.viewmodel.EventViewModel;
+import com.example.footbapp.viewmodel.TeamViewModel;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class FavoriteTeamFragment extends Fragment {
-    private RoomViewModel roomViewModel;
+    private TeamViewModel teamViewModel;
     private ApiViewModel apiViewModel;
+    private EventViewModel eventViewModel;
     private RecyclerView favoriteTeamsRv;
     private RecyclerView subscribedEventsRv;
     private FavoriteTeamAdapter favoriteTeamAdapter;
+    private EventAdapter eventAdapter;
     private TabLayout favoriteTeamTabLayout;
+    private List<Event> subscribedEvents;
+
     public FavoriteTeamFragment() {
     }
 
@@ -51,12 +60,15 @@ public class FavoriteTeamFragment extends Fragment {
 
         favoriteTeamsRv = getActivity().findViewById(R.id.favoriteTeamsRv);
         subscribedEventsRv = getActivity().findViewById(R.id.subscribedEventsRv);
-
+        subscribedEventsRv.setVisibility(View.INVISIBLE);
 
         favoriteTeamTabLayout = getActivity().findViewById(R.id.favoriteTeamTabLayout);
 
-        roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
+        teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
+
         loadFavoriteTeams();
+        loadSubscribedEvents();
 
         favoriteTeamTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -64,10 +76,12 @@ public class FavoriteTeamFragment extends Fragment {
                 switch (tab.getPosition()) {
                     case 0:
                         favoriteTeamsRv.setVisibility(View.VISIBLE);
+                        subscribedEventsRv.setVisibility(View.INVISIBLE);
                         System.out.println("FAVORITE TEAMS");
                         break;
                     case 1:
                         favoriteTeamsRv.setVisibility(View.INVISIBLE);
+                        subscribedEventsRv.setVisibility(View.VISIBLE);
                         System.out.println("SUBSCRIBED EVENTS");
                         break;
                 }
@@ -85,17 +99,57 @@ public class FavoriteTeamFragment extends Fragment {
     }
 
     private void loadFavoriteTeams() {
-        roomViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
+        teamViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
                 favoriteTeamAdapter = new FavoriteTeamAdapter(teams);
-                populateRecyclerView();
+                populateTeamRecyclerView();
 
             }
         });
     }
 
-    private void populateRecyclerView() {
+    private void loadSubscribedEvents() {
+        eventViewModel.getAllSubscribedEvents().observe(this, new Observer<List<Event>>() {
+            @Override
+            public void onChanged(@Nullable List<Event> events) {
+                subscribedEvents = new ArrayList<>(events);
+                eventAdapter = new EventAdapter(events);
+                eventAdapter.setSubscribedEvents(subscribedEvents);
+                populateEventRecyclerView();
+            }
+        });
+    }
+
+    private void populateEventRecyclerView() {
+        subscribedEventsRv.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        subscribedEventsRv.setAdapter(eventAdapter);
+        subscribedEventsRv.setHasFixedSize(true);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final Event deletedEvent = eventAdapter.getEventAt(viewHolder.getAdapterPosition());
+                String deletedEventName = deletedEvent.getStrEvent();
+                eventViewModel.delete(eventAdapter.getEventAt(viewHolder.getAdapterPosition()));
+                Snackbar.make(favoriteTeamsRv, "Unsubscribed from " + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                eventViewModel.insert(deletedEvent);
+                            }
+                        }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
+
+            }
+        }).attachToRecyclerView(subscribedEventsRv);
+    }
+
+    private void populateTeamRecyclerView() {
         favoriteTeamsRv.setLayoutManager(new GridLayoutManager(getContext(), 1));
         favoriteTeamsRv.setAdapter(favoriteTeamAdapter);
         favoriteTeamsRv.setHasFixedSize(true);
@@ -105,6 +159,7 @@ public class FavoriteTeamFragment extends Fragment {
             public void onItemClick(Team team, String teamName, ImageView imageView) {
                 Intent intent = new Intent(getActivity(), EventListActivity.class);
                 intent.putExtra("team", team);
+                intent.putExtra("subscribedEvents", (Serializable) subscribedEvents);
 
                 startActivity(intent);
             }
@@ -120,12 +175,12 @@ public class FavoriteTeamFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 final Team deletedTeam = favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition());
                 String deletedTeamName = deletedTeam.getTeamName();
-                roomViewModel.delete(favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition()));
+                teamViewModel.delete(favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition()));
                 Snackbar.make(favoriteTeamsRv, "Removed " + deletedTeamName + " from favorite teams!", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                roomViewModel.insert(deletedTeam);
+                                teamViewModel.insert(deletedTeam);
                             }
                         }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
 

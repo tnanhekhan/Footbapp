@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import com.example.footbapp.adapter.EventAdapter;
 import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.ApiViewModel;
+import com.example.footbapp.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,11 @@ public class EventListActivity extends AppCompatActivity {
     private EventAdapter eventAdapter;
     private List<Event> events;
     private ApiViewModel apiViewModel;
+    private EventViewModel eventViewModel;
     private ProgressBar progressBar;
+    private List<Event> subscribedEvents;
+    private boolean subscribed = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +47,17 @@ public class EventListActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Upcoming Games");
 
         events = new ArrayList<>();
+        subscribedEvents = (List<Event>) getIntent().getSerializableExtra("subscribedEvents");
         eventsRv = findViewById(R.id.eventsRv);
         progressBar = findViewById(R.id.eventListProgressBar);
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
 
         isLoaded();
         loadEvents(String.valueOf(team.getIdTeam()));
+
+        Log.e("SubscribedSize", String.valueOf(subscribedEvents.size()));
     }
 
     private void isLoaded() {
@@ -80,30 +90,32 @@ public class EventListActivity extends AppCompatActivity {
 
     private void populateRecyclerView() {
         eventAdapter = new EventAdapter(events);
+        eventAdapter.setSubscribedEvents(subscribedEvents);
         eventsRv.setLayoutManager(new GridLayoutManager(this, 1));
         eventsRv.setAdapter(eventAdapter);
 
         eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Event event, ImageView notificationIcon) {
-                if (event.getStrDate() != null) {
-                    //TO DO: IMPLEMENT ONCLICK NOTIFCATION
-                    if(notificationIcon.getDrawable() == getDrawable(R.drawable.ic_notifications_off_black_24dp)){
-                        notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
+                if (event.getDateEvent() != null) {
+                    if (!event.isSubscribed()) {
+                        event.setIdTeam(team.getIdTeam());
+                        eventViewModel.insert(event);
                         Toast.makeText(EventListActivity.this,
                                 "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
                                 Toast.LENGTH_SHORT).show();
-                    }else if(notificationIcon.getDrawable() == getDrawable(R.drawable.ic_notifications_black_24dp)){
-                        notificationIcon.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+                        notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
+                    } else if (event.isSubscribed()) {
+                        eventViewModel.delete(event);
                         Toast.makeText(EventListActivity.this,
                                 "Unsubscribed from " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
                                 Toast.LENGTH_SHORT).show();
+                        notificationIcon.setImageResource(R.drawable.ic_notifications_off_black_24dp);
                     }
                 }
             }
         });
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
