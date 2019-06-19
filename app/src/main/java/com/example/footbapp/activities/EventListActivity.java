@@ -3,7 +3,7 @@ package com.example.footbapp.activities;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -56,6 +56,7 @@ public class EventListActivity extends AppCompatActivity {
 
     private void populateRecyclerView() {
         eventAdapter = new EventAdapter(events);
+        eventsRv.setLayoutManager(new GridLayoutManager(this, 1));
         eventsRv.setAdapter(eventAdapter);
 
         eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {

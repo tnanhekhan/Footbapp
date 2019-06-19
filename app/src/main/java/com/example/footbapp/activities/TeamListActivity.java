@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -56,8 +57,8 @@ public class TeamListActivity extends AppCompatActivity {
 
     private void populateRecyclerView() {
         teamAdapter = new TeamAdapter(teams);
+        teamsRv.setLayoutManager(new GridLayoutManager(this, 1));
         teamsRv.setAdapter(teamAdapter);
-        teamsRv.setLayoutManager(new LinearLayoutManager(this));
 
         teamAdapter.setOnItemClickListener(new TeamAdapter.OnItemClickListener() {
             @Override

@@ -25,16 +25,14 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
-
-        View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.favorite_team_row, viewGroup, false);
-        return new ViewHolder(itemView);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.favorite_team_row, null);
+        FavoriteTeamAdapter.ViewHolder viewHolder = new FavoriteTeamAdapter.ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-
-
         viewHolder.favoriteTeamNameTextView.setText(favoriteTeams.get(i).getTeamName());
         Glide.with(context).load(favoriteTeams.get(i).getBadgePath()).placeholder(R.drawable.ic_soccer_ball).into(viewHolder.favoriteTeamImageView);
 

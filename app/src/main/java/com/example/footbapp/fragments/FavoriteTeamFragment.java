@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -49,19 +49,30 @@ public class FavoriteTeamFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         favoriteTeamsRv = getActivity().findViewById(R.id.favoriteTeamsRv);
-        favoriteTeamsRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        favoriteTeamsRv.setHasFixedSize(true);
 
         favoriteTeamAdapter = new FavoriteTeamAdapter();
-        favoriteTeamsRv.setAdapter(favoriteTeamAdapter);
 
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
+
+        loadFavoriteTeams();
+
+    }
+
+    private void loadFavoriteTeams() {
         roomViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
             @Override
             public void onChanged(@Nullable List<Team> teams) {
                 favoriteTeamAdapter.setFavoriteTeams(teams);
+                populateRecyclerView();
+
             }
         });
+    }
+
+    private void populateRecyclerView() {
+        favoriteTeamsRv.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        favoriteTeamsRv.setAdapter(favoriteTeamAdapter);
+        favoriteTeamsRv.setHasFixedSize(true);
 
         favoriteTeamAdapter.setOnItemClickListener(new FavoriteTeamAdapter.OnItemClickListener() {
             @Override
@@ -94,6 +105,6 @@ public class FavoriteTeamFragment extends Fragment {
 
             }
         }).attachToRecyclerView(favoriteTeamsRv);
-
     }
+
 }
