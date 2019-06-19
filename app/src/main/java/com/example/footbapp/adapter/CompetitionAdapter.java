@@ -38,7 +38,7 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
     @Override
     public void onBindViewHolder(@NonNull CompetitionAdapter.ViewHolder viewHolder, int i) {
         viewHolder.competitionTextView.setText(mCompetitions.get(i).getName());
-        Glide.with(context).load(mCompetitions.get(i).getEmblemUrl()).into(viewHolder.competitionImageView);
+        Glide.with(context).load(mCompetitions.get(i).getEmblemUrl()).placeholder(R.drawable.ic_trophy).into(viewHolder.competitionImageView);
     }
 
     @Override

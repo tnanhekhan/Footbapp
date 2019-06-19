@@ -23,6 +23,7 @@ public class ApiViewModel extends AndroidViewModel {
     private MutableLiveData<TeamResource> teamResource = new MutableLiveData<>();
     private MutableLiveData<EventResource> eventResource = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> loaded = new MutableLiveData<>();
     private MutableLiveData<String> error = new MutableLiveData<>();
 
     public ApiViewModel(@NonNull Application application) {
@@ -45,6 +46,14 @@ public class ApiViewModel extends AndroidViewModel {
         return error;
     }
 
+    public MutableLiveData<Boolean> IsLoaded() {
+        return loaded;
+    }
+
+    private void dataRetrieved() {
+        loaded.postValue(true);
+    }
+
     public void getCompetitions() {
         theSportsDbRepository.getCompetitions()
                 .enqueue(new Callback<CompetitionResource>() {
@@ -52,6 +61,7 @@ public class ApiViewModel extends AndroidViewModel {
                     public void onResponse(Call<CompetitionResource> call, Response<CompetitionResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             competitionResource.setValue(response.body());
+                            dataRetrieved();
                         } else {
                             error.setValue("API error: " + response.message());
                         }
@@ -72,6 +82,8 @@ public class ApiViewModel extends AndroidViewModel {
                     public void onResponse(Call<TeamResource> call, Response<TeamResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             teamResource.setValue(response.body());
+                            dataRetrieved();
+
                         } else {
                             error.setValue("API error: " + response.message());
                         }
@@ -93,6 +105,8 @@ public class ApiViewModel extends AndroidViewModel {
                     public void onResponse(Call<EventResource> call, Response<EventResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             eventResource.setValue(response.body());
+                            dataRetrieved();
+
                         } else {
                             error.setValue("API error: " + response.message());
                         }

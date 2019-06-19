@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
     private RoomViewModel roomViewModel;
     private FloatingActionButton favoriteButton;
     private boolean favorited = false;
+    private CircularProgressDrawable progressBar;
 
 
     @Override
@@ -59,6 +61,11 @@ public class TeamOverviewActivity extends AppCompatActivity {
                 Toast.makeText(TeamOverviewActivity.this, "Data changed - Number of teams in db: " + roomViewModel.getAllFavoriteTeams().getValue().size(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        progressBar = new CircularProgressDrawable(this);
+        progressBar.setStrokeWidth(5f);
+        progressBar.setCenterRadius(30f);
+        progressBar.setBackgroundColor(R.color.colorPrimary);
     }
 
     @Override
@@ -94,9 +101,9 @@ public class TeamOverviewActivity extends AppCompatActivity {
         descriptionTextView.setText(team.getDescription());
 
 
-        Glide.with(this).load(team.getBadgePath()).into(badgeImageView);
-        Glide.with(this).load(team.getKitImage()).into(kitImageView);
-        Glide.with(this).load(team.getStadiumImage()).into(stadiumImageView);
+        Glide.with(this).load(team.getBadgePath()).placeholder(progressBar).into(badgeImageView);
+        Glide.with(this).load(team.getKitImage()).placeholder(progressBar).into(kitImageView);
+        Glide.with(this).load(team.getStadiumImage()).placeholder(progressBar).into(stadiumImageView);
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override

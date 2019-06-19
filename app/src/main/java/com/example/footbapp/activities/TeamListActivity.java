@@ -1,14 +1,18 @@
 package com.example.footbapp.activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.footbapp.R;
 import com.example.footbapp.adapter.TeamAdapter;
@@ -25,6 +29,7 @@ public class TeamListActivity extends AppCompatActivity {
     private TeamAdapter teamAdapter;
     private ApiViewModel viewModel;
     private int id;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -37,13 +42,28 @@ public class TeamListActivity extends AppCompatActivity {
         id = bundle.getInt("id");
 
         teamsRv = findViewById(R.id.teamsRv);
+        progressBar = findViewById(R.id.teamListProgressBar);
 
         teams = new ArrayList<>();
         setTitle(bundle.getString("name"));
 
         viewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
+        isLoaded();
         loadTeams(String.valueOf(id));
+    }
+
+    private void isLoaded() {
+        viewModel.IsLoaded().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoaded) {
+                if (isLoaded != null) {
+                    if (isLoaded) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
     private void loadTeams(String id) {

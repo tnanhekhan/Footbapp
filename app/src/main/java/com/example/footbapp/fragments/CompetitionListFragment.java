@@ -1,6 +1,7 @@
 package com.example.footbapp.fragments;
 
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.footbapp.R;
@@ -29,6 +31,7 @@ public class CompetitionListFragment extends Fragment {
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
+    private ProgressBar progressBar;
 
     public CompetitionListFragment() {
     }
@@ -45,6 +48,7 @@ public class CompetitionListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         message = getActivity().findViewById(R.id.competitionListMessage);
 
+        progressBar = getActivity().findViewById(R.id.competitionListProgressBar);
 
         competitionsRv = getActivity().findViewById(R.id.competitionsRv);
 
@@ -52,8 +56,22 @@ public class CompetitionListFragment extends Fragment {
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
 
+        isLoaded();
         loadCompetitions();
 
+    }
+
+    private void isLoaded() {
+        apiViewModel.IsLoaded().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoaded) {
+                if (isLoaded != null) {
+                    if (isLoaded) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
     private void loadCompetitions() {

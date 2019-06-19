@@ -1,12 +1,16 @@
 package com.example.footbapp.activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.footbapp.R;
@@ -24,6 +28,7 @@ public class EventListActivity extends AppCompatActivity {
     private EventAdapter eventAdapter;
     private List<Event> events;
     private ApiViewModel apiViewModel;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,25 @@ public class EventListActivity extends AppCompatActivity {
 
         events = new ArrayList<>();
         eventsRv = findViewById(R.id.eventsRv);
+        progressBar = findViewById(R.id.eventListProgressBar);
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
+
+        isLoaded();
         loadEvents(String.valueOf(team.getIdTeam()));
+    }
+
+    private void isLoaded() {
+        apiViewModel.IsLoaded().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoaded) {
+                if (isLoaded != null) {
+                    if (isLoaded) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
     private void loadEvents(String id) {
