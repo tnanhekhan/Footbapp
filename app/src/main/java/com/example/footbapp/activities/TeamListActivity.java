@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  */
 public class TeamListActivity extends AppCompatActivity {
-    public final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
+    private final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
     private List<Team> teams;
     private RecyclerView teamsRv;
     private TeamAdapter teamAdapter;

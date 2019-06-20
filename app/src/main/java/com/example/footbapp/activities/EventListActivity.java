@@ -24,10 +24,10 @@ import java.util.Objects;
  * Activity class for the Event List Activity
  */
 public class EventListActivity extends AppCompatActivity {
-    public final String SUBTITLE_ACTIVITY = "Upcoming Games";
-    public final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
-    public final String SUBSCRIBED_EVENT_TOAST_MESSAGE = "Subscribed to ";
-    public final String UNSUBSCRIBED_EVENT_TOAST_MESSAGE = "Unsubscribed from ";
+    private final String SUBTITLE_ACTIVITY = "Upcoming Games";
+    private final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
+    private final String SUBSCRIBED_EVENT_TOAST_MESSAGE = "Subscribed to ";
+    private final String UNSUBSCRIBED_EVENT_TOAST_MESSAGE = "Unsubscribed from ";
     private Team team;
     private RecyclerView eventsRv;
     private List<Event> events;
