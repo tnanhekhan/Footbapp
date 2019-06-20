@@ -234,18 +234,19 @@ public class FavoriteTeamFragment extends Fragment {
         activityIntent.putExtra("code", "notified");
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        if(!list.isEmpty()){
+            Notification notification = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_soccer_ball)
+                    .setContentTitle(list.get(0).getStrEvent())
+                    .setContentText("Starting at " + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                    .setContentIntent(pendingIntent)
+                    .build();
 
-        Notification notification = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_soccer_ball)
-                .setContentTitle(list.get(0).getStrEvent())
-                .setContentText("Starting at " + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_EVENT)
-                .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
-                .setContentIntent(pendingIntent)
-                .build();
-
-        notificationManagerCompat.notify(1, notification);
+            notificationManagerCompat.notify(list.get(0).getIdEvent(), notification);
+        }
     }
 
 }
