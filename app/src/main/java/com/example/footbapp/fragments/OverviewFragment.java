@@ -2,7 +2,6 @@ package com.example.footbapp.fragments;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,8 +19,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 
 import com.example.footbapp.R;
 import com.example.footbapp.activities.EventListActivity;
@@ -36,42 +33,48 @@ import com.example.footbapp.viewmodel.TeamViewModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
 
 
-public class FavoriteTeamFragment extends Fragment {
+/**
+ * Fragment class for the Overview Fragment
+ *
+ */
+public class OverviewFragment extends Fragment {
+    private static final String UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE = "Unsubscribed from ";
+    private static final String NOTIFICATION_BODY_MESSAGE = "Starting at ";
     private TeamViewModel teamViewModel;
     private EventViewModel eventViewModel;
     private RecyclerView favoriteTeamsRv;
     private RecyclerView subscribedEventsRv;
     private FavoriteTeamAdapter favoriteTeamAdapter;
     private EventAdapter eventAdapter;
-    private TabLayout favoriteTeamTabLayout;
     private List<Event> subscribedEvents;
     private NotificationManagerCompat notificationManagerCompat;
 
 
-    public FavoriteTeamFragment() {
+    public OverviewFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_team, container, false);
+        return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        favoriteTeamsRv = getActivity().findViewById(R.id.favoriteTeamsRv);
+        favoriteTeamsRv = Objects.requireNonNull(getActivity()).findViewById(R.id.favoriteTeamsRv);
         subscribedEventsRv = getActivity().findViewById(R.id.subscribedEventsRv);
         subscribedEventsRv.setVisibility(View.INVISIBLE);
 
         notificationManagerCompat = NotificationManagerCompat.from(getActivity());
-        favoriteTeamTabLayout = getActivity().findViewById(R.id.favoriteTeamTabLayout);
+        TabLayout favoriteTeamTabLayout = getActivity().findViewById(R.id.favoriteTeamTabLayout);
 
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
         eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
@@ -84,7 +87,7 @@ public class FavoriteTeamFragment extends Fragment {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             if (extras.containsKey("code")) {
-                favoriteTeamTabLayout.getTabAt(1).select();
+                Objects.requireNonNull(favoriteTeamTabLayout.getTabAt(1)).select();
                 favoriteTeamsRv.setVisibility(View.INVISIBLE);
                 subscribedEventsRv.setVisibility(View.VISIBLE);
                 intent.removeExtra("code");
@@ -118,47 +121,36 @@ public class FavoriteTeamFragment extends Fragment {
     }
 
     private void loadFavoriteTeams() {
-        teamViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
-            @Override
-            public void onChanged(@Nullable List<Team> teams) {
-                favoriteTeamAdapter = new FavoriteTeamAdapter(teams);
-                populateTeamRecyclerView();
+        teamViewModel.getAllFavoriteTeams().observe(this, teams -> {
+            favoriteTeamAdapter = new FavoriteTeamAdapter(teams);
+            populateTeamRecyclerView();
 
-            }
         });
     }
 
     private void loadSubscribedEvents() {
-        eventViewModel.getAllSubscribedEvents().observe(this, new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                subscribedEvents = new ArrayList<>(events);
+        eventViewModel.getAllSubscribedEvents().observe(this, events -> {
+            subscribedEvents = new ArrayList<>(Objects.requireNonNull(events));
 
-                eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
-                    @Override
-                    public void onItemCheck(Event event, CheckBox notificationCheckBox) {
+            eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
+                @Override
+                public void onItemCheck(Event event) {
 
-                    }
+                }
 
-                    @Override
-                    public void onItemUnCheck(Event event, CheckBox notificationCheckBox) {
-                        final Event deletedEvent = event;
-                        String deletedEventName = deletedEvent.getStrEvent();
-                        eventViewModel.delete(event);
-                        Snackbar.make(favoriteTeamsRv, "Unsubscribed from " + deletedEventName + "!", Snackbar.LENGTH_LONG)
-                                .setAction("UNDO", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        eventViewModel.insert(deletedEvent);
-                                    }
-                                }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
-                    }
-                });
+                @Override
+                public void onItemUnCheck(Event event) {
+                    final Event deletedEvent = event;
+                    String deletedEventName = deletedEvent.getStrEvent();
+                    eventViewModel.delete(event);
+                    Snackbar.make(favoriteTeamsRv, UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", v -> eventViewModel.insert(deletedEvent)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
+                }
+            });
 
-                eventAdapter.setSubscribedEvents(subscribedEvents);
-                sendOnChannel1(subscribedEvents);
-                populateEventRecyclerView();
-            }
+            eventAdapter.setSubscribedEvents(subscribedEvents);
+            sendOnChannel1(subscribedEvents);
+            populateEventRecyclerView();
         });
     }
 
@@ -178,13 +170,8 @@ public class FavoriteTeamFragment extends Fragment {
                 final Event deletedEvent = eventAdapter.getEventAt(viewHolder.getAdapterPosition());
                 String deletedEventName = deletedEvent.getStrEvent();
                 eventViewModel.delete(eventAdapter.getEventAt(viewHolder.getAdapterPosition()));
-                Snackbar.make(favoriteTeamsRv, "Unsubscribed from " + deletedEventName + "!", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                eventViewModel.insert(deletedEvent);
-                            }
-                        }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
+                Snackbar.make(favoriteTeamsRv, UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", v -> eventViewModel.insert(deletedEvent)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
 
             }
         }).attachToRecyclerView(subscribedEventsRv);
@@ -195,15 +182,12 @@ public class FavoriteTeamFragment extends Fragment {
         favoriteTeamsRv.setAdapter(favoriteTeamAdapter);
         favoriteTeamsRv.setHasFixedSize(true);
 
-        favoriteTeamAdapter.setOnItemClickListener(new FavoriteTeamAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Team team, String teamName, ImageView imageView) {
-                Intent intent = new Intent(getActivity(), EventListActivity.class);
-                intent.putExtra("team", team);
-                intent.putExtra("subscribedEvents", (Serializable) subscribedEvents);
+        favoriteTeamAdapter.setOnItemClickListener(team -> {
+            Intent intent = new Intent(getActivity(), EventListActivity.class);
+            intent.putExtra("team", team);
+            intent.putExtra("subscribedEvents", (Serializable) subscribedEvents);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -218,27 +202,22 @@ public class FavoriteTeamFragment extends Fragment {
                 String deletedTeamName = deletedTeam.getTeamName();
                 teamViewModel.delete(favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition()));
                 Snackbar.make(favoriteTeamsRv, "Removed " + deletedTeamName + " from favorite teams!", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                teamViewModel.insert(deletedTeam);
-                            }
-                        }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
+                        .setAction("UNDO", v -> teamViewModel.insert(deletedTeam)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
 
             }
         }).attachToRecyclerView(favoriteTeamsRv);
     }
 
-    public void sendOnChannel1(List<Event> list) {
+    private void sendOnChannel1(List<Event> list) {
         Intent activityIntent = new Intent(getActivity(), MainActivity.class);
         activityIntent.putExtra("code", "notified");
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if(!list.isEmpty()){
-            Notification notification = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID)
+            Notification notification = new NotificationCompat.Builder(Objects.requireNonNull(getActivity()), CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_soccer_ball)
                     .setContentTitle(list.get(0).getStrEvent())
-                    .setContentText("Starting at " + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
+                    .setContentText(NOTIFICATION_BODY_MESSAGE + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)

@@ -10,9 +10,13 @@ import com.example.footbapp.repository.EventRepository;
 
 import java.util.List;
 
+/**
+ * Viewmodel class for Subscribed Events
+ *
+ */
 public class EventViewModel extends AndroidViewModel {
-    private EventRepository eventRepository;
-    private LiveData<List<Event>> allSubscribedEvents;
+    private final EventRepository eventRepository;
+    private final LiveData<List<Event>> allSubscribedEvents;
 
     public EventViewModel(@NonNull Application application) {
         super(application);
@@ -26,10 +30,6 @@ public class EventViewModel extends AndroidViewModel {
 
     public void delete(Event event) {
         eventRepository.delete(event);
-    }
-
-    public void update(Event event) {
-        eventRepository.update(event);
     }
 
     public void deletAllSubscribedEvents() {

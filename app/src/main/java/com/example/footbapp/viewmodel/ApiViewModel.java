@@ -14,15 +14,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * ViewModel class for The Sports Db Api
+ *
+ */
 public class ApiViewModel extends AndroidViewModel {
-    private TheSportsDbRepository theSportsDbRepository = new TheSportsDbRepository();
+    private final TheSportsDbRepository theSportsDbRepository = new TheSportsDbRepository();
 
-    private MutableLiveData<CompetitionResource> competitionResource = new MutableLiveData<>();
-    private MutableLiveData<TeamResource> teamResource = new MutableLiveData<>();
-    private MutableLiveData<EventResource> eventResource = new MutableLiveData<>();
+    private final MutableLiveData<CompetitionResource> competitionResource = new MutableLiveData<>();
+    private final MutableLiveData<TeamResource> teamResource = new MutableLiveData<>();
+    private final MutableLiveData<EventResource> eventResource = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> loaded = new MutableLiveData<>();
-    private MutableLiveData<String> error = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> loaded = new MutableLiveData<>();
+    private final MutableLiveData<String> error = new MutableLiveData<>();
 
     public ApiViewModel(@NonNull Application application) {
         super(application);
@@ -40,10 +44,6 @@ public class ApiViewModel extends AndroidViewModel {
         return eventResource;
     }
 
-    public MutableLiveData<String> getError() {
-        return error;
-    }
-
     public MutableLiveData<Boolean> IsLoaded() {
         return loaded;
     }
@@ -56,7 +56,7 @@ public class ApiViewModel extends AndroidViewModel {
         theSportsDbRepository.getCompetitions()
                 .enqueue(new Callback<CompetitionResource>() {
                     @Override
-                    public void onResponse(Call<CompetitionResource> call, Response<CompetitionResource> response) {
+                    public void onResponse(@NonNull Call<CompetitionResource> call, @NonNull Response<CompetitionResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             competitionResource.setValue(response.body());
                             dataRetrieved();
@@ -66,7 +66,7 @@ public class ApiViewModel extends AndroidViewModel {
                     }
 
                     @Override
-                    public void onFailure(Call<CompetitionResource> call, Throwable t) {
+                    public void onFailure(@NonNull Call<CompetitionResource> call, @NonNull Throwable t) {
                         error.setValue("API error: " + t.getMessage());
                     }
                 });
@@ -77,7 +77,7 @@ public class ApiViewModel extends AndroidViewModel {
                 .getCompetitionById(competitionId)
                 .enqueue(new Callback<TeamResource>() {
                     @Override
-                    public void onResponse(Call<TeamResource> call, Response<TeamResource> response) {
+                    public void onResponse(@NonNull Call<TeamResource> call, @NonNull Response<TeamResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             teamResource.setValue(response.body());
                             dataRetrieved();
@@ -88,7 +88,7 @@ public class ApiViewModel extends AndroidViewModel {
                     }
 
                     @Override
-                    public void onFailure(Call<TeamResource> call, Throwable t) {
+                    public void onFailure(@NonNull Call<TeamResource> call, @NonNull Throwable t) {
                         error.setValue("API error: " + t.getMessage());
 
                     }
@@ -100,7 +100,7 @@ public class ApiViewModel extends AndroidViewModel {
                 .getEventsById(teamId)
                 .enqueue(new Callback<EventResource>() {
                     @Override
-                    public void onResponse(Call<EventResource> call, Response<EventResource> response) {
+                    public void onResponse(@NonNull Call<EventResource> call, @NonNull Response<EventResource> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             eventResource.setValue(response.body());
                             dataRetrieved();
@@ -111,7 +111,7 @@ public class ApiViewModel extends AndroidViewModel {
                     }
 
                     @Override
-                    public void onFailure(Call<EventResource> call, Throwable t) {
+                    public void onFailure(@NonNull Call<EventResource> call, @NonNull Throwable t) {
                         error.setValue("API error: " + t.getMessage());
                     }
                 });

@@ -17,25 +17,25 @@ public class Event implements Serializable {
 
     @PrimaryKey
     @Expose
-    private int idEvent;
+    private final int idEvent;
     @Expose
-    private int intRound;
+    private final int intRound;
     @Expose
-    private String strEvent;
+    private final String strEvent;
     @Expose
-    private String strHomeTeam;
+    private final String strHomeTeam;
     @Expose
-    private String strAwayTeam;
+    private final String strAwayTeam;
     @Expose
-    private String dateEvent;
+    private final String dateEvent;
     @Expose
-    private String strTime;
+    private final String strTime;
     @Expose
-    private String idHomeTeam;
+    private final String idHomeTeam;
     @Expose
-    private String idAwayTeam;
+    private final String idAwayTeam;
     @Expose
-    private String strLeague;
+    private final String strLeague;
 
     private boolean subscribed;
 
@@ -62,80 +62,40 @@ public class Event implements Serializable {
         return idEvent;
     }
 
-    public void setIdEvent(int idEvent) {
-        this.idEvent = idEvent;
-    }
-
     public int getIntRound() {
         return intRound;
-    }
-
-    public void setIntRound(int intRound) {
-        this.intRound = intRound;
     }
 
     public String getStrEvent() {
         return strEvent;
     }
 
-    public void setStrEvent(String strEvent) {
-        this.strEvent = strEvent;
-    }
-
     public String getStrHomeTeam() {
         return strHomeTeam;
-    }
-
-    public void setStrHomeTeam(String strHomeTeam) {
-        this.strHomeTeam = strHomeTeam;
     }
 
     public String getStrAwayTeam() {
         return strAwayTeam;
     }
 
-    public void setStrAwayTeam(String strAwayTeam) {
-        this.strAwayTeam = strAwayTeam;
-    }
-
     public String getDateEvent() {
         return dateEvent;
-    }
-
-    public void setDateEvent(String dateEvent) {
-        this.dateEvent = dateEvent;
     }
 
     public String getStrTime() {
         return strTime;
     }
 
-    public void setStrTime(String strTime) {
-        this.strTime = strTime;
-    }
-
     public String getIdHomeTeam() {
         return idHomeTeam;
-    }
-
-    public void setIdHomeTeam(String idHomeTeam) {
-        this.idHomeTeam = idHomeTeam;
     }
 
     public String getIdAwayTeam() {
         return idAwayTeam;
     }
 
-    public void setIdAwayTeam(String idAwayTeam) {
-        this.idAwayTeam = idAwayTeam;
-    }
-
     public String getStrLeague() {
         return strLeague;
-    }
-
-    public void setStrLeague(String strLeague) {
-        this.strLeague = strLeague;
     }
 
     public boolean isSubscribed() {

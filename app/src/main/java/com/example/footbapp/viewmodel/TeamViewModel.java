@@ -10,9 +10,13 @@ import com.example.footbapp.repository.TeamRepository;
 
 import java.util.List;
 
+/**
+ * ViewModel class for Favorite Teams
+ *
+ */
 public class TeamViewModel extends AndroidViewModel {
-    private TeamRepository teamRepository;
-    private LiveData<List<Team>> allTeams;
+    private final TeamRepository teamRepository;
+    private final LiveData<List<Team>> allTeams;
 
     public TeamViewModel(@NonNull Application application) {
         super(application);
@@ -26,10 +30,6 @@ public class TeamViewModel extends AndroidViewModel {
 
     public void delete(Team team) {
         teamRepository.delete(team);
-    }
-
-    public void update(Team team) {
-        teamRepository.update(team);
     }
 
     public void deleteAllFavoriteTeams() {

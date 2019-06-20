@@ -8,6 +8,10 @@ import android.content.Context;
 import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
 
+/**
+ * Room database class for the application
+ *
+ */
 @Database(entities = {Team.class, Event.class}, version = 1, exportSchema = false)
 public abstract class TeamDatabase extends RoomDatabase {
 

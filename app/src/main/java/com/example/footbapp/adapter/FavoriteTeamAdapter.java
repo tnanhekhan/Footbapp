@@ -15,8 +15,12 @@ import com.example.footbapp.model.Team;
 
 import java.util.List;
 
+/**
+ * Recyclerview Adapter used in the Overview fragment
+ *
+ */
 public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapter.ViewHolder> {
-    private List<Team> favoriteTeams;
+    private final List<Team> favoriteTeams;
     private OnItemClickListener listener;
     private Context context;
 
@@ -30,8 +34,7 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.favorite_team_row, null);
-        FavoriteTeamAdapter.ViewHolder viewHolder = new FavoriteTeamAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -55,27 +58,24 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Team team, String teamName, ImageView imageView);
+        void onItemClick(Team team);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView favoriteTeamNameTextView;
-        ImageView favoriteTeamImageView;
+        final TextView favoriteTeamNameTextView;
+        final ImageView favoriteTeamImageView;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             favoriteTeamNameTextView = itemView.findViewById(R.id.favoriteTeamNameTextView);
             favoriteTeamImageView = itemView.findViewById(R.id.favoriteTeamImageView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
 
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(favoriteTeams.get(position), favoriteTeams.get(position).getTeamName(), favoriteTeamImageView);
-                    }
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(favoriteTeams.get(position));
                 }
             });
         }

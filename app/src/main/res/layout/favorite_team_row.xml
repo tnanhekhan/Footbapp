@@ -29,7 +29,8 @@
                 android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/team_badge" />
 
             <TextView
                 android:id="@+id/favoriteTeamNameTextView"
@@ -58,11 +59,10 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/upcomingGamesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="SEE UPCOMING GAMES"
+                    android:text="@string/see_upcoming_games"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />

@@ -11,6 +11,10 @@ import com.example.footbapp.model.Team;
 
 import java.util.List;
 
+/**
+ * Dao class for Favorite Teams
+ *
+ */
 @Dao
 public interface TeamDao {
 

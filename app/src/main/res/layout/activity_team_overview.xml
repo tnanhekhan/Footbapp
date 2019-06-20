@@ -7,7 +7,6 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
@@ -18,7 +17,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
 
 
@@ -38,7 +37,8 @@
                     android:adjustViewBounds="false"
                     android:cropToPadding="false"
                     android:scaleType="fitCenter"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:contentDescription="@string/team_badge" />
 
                 <ImageView
                     android:id="@+id/kitImageView"
@@ -48,7 +48,8 @@
                     android:adjustViewBounds="false"
                     android:cropToPadding="false"
                     android:scaleType="fitCenter"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:contentDescription="@string/team_kit" />
 
 
             </LinearLayout>
@@ -62,7 +63,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="@string/team_stadium" />
 
             <TextView
                 android:id="@+id/stadiumTextView"
@@ -70,7 +72,7 @@
                 android:layout_height="19dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Name of Stadium: "
+                android:text="@string/name_of_stadium"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stadiumImageView" />
@@ -81,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Location:"
+                android:text="@string/location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stadiumTextView" />
 
@@ -91,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Description:"
+                android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
 
@@ -103,7 +105,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="TextView"
+                android:text="@string/textview"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,6 +125,7 @@
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+        app:srcCompat="@drawable/ic_favorite_border_black_24dp"
+        android:focusable="true" />
 
 </android.support.constraint.ConstraintLayout>

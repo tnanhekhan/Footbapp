@@ -1,10 +1,8 @@
 package com.example.footbapp.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,15 +17,17 @@ import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.TeamViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Activity class for Team Overview activity
+ *
+ */
 public class TeamOverviewActivity extends AppCompatActivity {
+    private final String DELETED_TEAM_TOAST_MESSAGE = "deleted from favorite teams!";
+    private final String INSERTED_TEAM_TOAST_MESSAGE = "stored as a favorite team!";
     private Team team;
-    private ImageView badgeImageView;
-    private ImageView kitImageView;
     private ImageView stadiumImageView;
-    private TextView stadiumTextView;
-    private TextView locationTextView;
-    private TextView descriptionTextView;
     private TeamViewModel teamViewModel;
     private FloatingActionButton favoriteButton;
     private boolean favorited = false;
@@ -38,28 +38,20 @@ public class TeamOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_overview);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        team = getIntent().getExtras().getParcelable("team");
+        team = Objects.requireNonNull(getIntent().getExtras()).getParcelable("team");
         initializeComponents();
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (stadiumImageView.getDrawable() == null) {
-                    stadiumImageView.setVisibility(View.GONE);
-                }
+        handler.postDelayed(() -> {
+            if (stadiumImageView.getDrawable() == null) {
+                stadiumImageView.setVisibility(View.GONE);
             }
         }, 500);
 
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
-        teamViewModel.getAllFavoriteTeams().observe(this, new Observer<List<Team>>() {
-            @Override
-            public void onChanged(@Nullable List<Team> teams) {
-                checkDatabase(teams);
-            }
-        });
+        teamViewModel.getAllFavoriteTeams().observe(this, teams -> checkDatabase(Objects.requireNonNull(teams)));
 
         progressBar = new CircularProgressDrawable(this);
         progressBar.setStrokeWidth(5f);
@@ -79,9 +71,9 @@ public class TeamOverviewActivity extends AppCompatActivity {
         supportFinishAfterTransition();
     }
 
-    public void checkDatabase(List<Team> teams) {
+    private void checkDatabase(List<Team> teams) {
         for (int i = 0; i < teams.size(); i++) {
-            if (teams.get(i).getIdTeam() == team.getIdTeam()) {
+            if (Objects.equals(teams.get(i).getIdTeam(), team.getIdTeam())) {
                 favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
                 favorited = true;
             }
@@ -91,18 +83,18 @@ public class TeamOverviewActivity extends AppCompatActivity {
     private void initializeComponents() {
         setTitle(team.getTeamName());
 
-        badgeImageView = findViewById(R.id.badgeImageView);
-        kitImageView = findViewById(R.id.kitImageView);
+        ImageView badgeImageView = findViewById(R.id.badgeImageView);
+        ImageView kitImageView = findViewById(R.id.kitImageView);
         stadiumImageView = findViewById(R.id.stadiumImageView);
-        stadiumTextView = findViewById(R.id.stadiumTextView);
-        locationTextView = findViewById(R.id.locationTextView);
-        descriptionTextView = findViewById(R.id.descriptionTextView);
+        TextView stadiumTextView = findViewById(R.id.stadiumTextView);
+        TextView locationTextView = findViewById(R.id.locationTextView);
+        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         favoriteButton = findViewById(R.id.favoriteFAB);
 
         badgeImageView.setTransitionName(team.getTeamName());
 
-        stadiumTextView.setText("Stadium name: " + team.getStadiumName());
-        locationTextView.setText("Location: " + team.getLocation());
+        stadiumTextView.setText(getResources().getString(R.string.stadium_name, team.getStadiumName()));
+        locationTextView.setText(getResources().getString(R.string.location, team.getLocation()));
         descriptionTextView.setText(team.getDescription());
 
 
@@ -110,18 +102,15 @@ public class TeamOverviewActivity extends AppCompatActivity {
         Glide.with(this).load(team.getKitImage()).placeholder(progressBar).into(kitImageView);
         Glide.with(this).load(team.getStadiumImage()).placeholder(progressBar).into(stadiumImageView);
 
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (favorited) {
-                    teamViewModel.delete(team);
-                    Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " deleted from favorite teams!", Toast.LENGTH_SHORT).show();
-                    favoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                } else {
-                    teamViewModel.insert(team);
-                    Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " stored as a favorite team!", Toast.LENGTH_SHORT).show();
-                    favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
-                }
+        favoriteButton.setOnClickListener(v -> {
+            if (favorited) {
+                teamViewModel.delete(team);
+                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + DELETED_TEAM_TOAST_MESSAGE, Toast.LENGTH_SHORT).show();
+                favoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            } else {
+                teamViewModel.insert(team);
+                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + INSERTED_TEAM_TOAST_MESSAGE, Toast.LENGTH_SHORT).show();
+                favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
         });
     }

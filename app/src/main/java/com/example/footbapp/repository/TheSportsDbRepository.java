@@ -8,11 +8,15 @@ import com.example.footbapp.model.TeamResource;
 
 import retrofit2.Call;
 
+/**
+ * Repository class for The Sports DB API
+ */
 public class TheSportsDbRepository {
-    private TheSportsDbService theSportsDbService = TheSportsDbApi.create();
+    private final String SPORT_PATH = "Soccer";
+    private final TheSportsDbService theSportsDbService = TheSportsDbApi.create();
 
     public Call<CompetitionResource> getCompetitions() {
-        return theSportsDbService.getCompetitions("Soccer");
+        return theSportsDbService.getCompetitions(SPORT_PATH);
     }
 
     public Call<TeamResource> getCompetitionById(String competitionId) {

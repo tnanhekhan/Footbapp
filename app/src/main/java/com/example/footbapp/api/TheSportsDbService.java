@@ -8,6 +8,10 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/**
+ * Service class for all the calls made to the api
+ *
+ */
 public interface TheSportsDbService {
 
     @GET("search_all_leagues.php")

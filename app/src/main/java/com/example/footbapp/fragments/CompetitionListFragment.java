@@ -1,16 +1,12 @@
 package com.example.footbapp.fragments;
 
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -24,25 +20,23 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 
 import com.example.footbapp.R;
-import com.example.footbapp.activities.MainActivity;
 import com.example.footbapp.activities.TeamListActivity;
 import com.example.footbapp.adapter.CompetitionAdapter;
-import com.example.footbapp.adapter.EventAdapter;
 import com.example.footbapp.model.Competition;
-import com.example.footbapp.model.Event;
 import com.example.footbapp.viewmodel.ApiViewModel;
 import com.example.footbapp.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
 
-
+/**
+ * Fragment Class for the Competition List
+ *
+ */
 public class CompetitionListFragment extends Fragment {
-    public final String FILTERED_COMP = "Colombia Categoría Primera A";
     private ApiViewModel apiViewModel;
-    private EventViewModel eventViewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
@@ -60,7 +54,7 @@ public class CompetitionListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_competition_list, container, false);
@@ -70,14 +64,14 @@ public class CompetitionListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        progressBar = getActivity().findViewById(R.id.competitionListProgressBar);
+        progressBar = Objects.requireNonNull(getActivity()).findViewById(R.id.competitionListProgressBar);
 
         competitionsRv = getActivity().findViewById(R.id.competitionsRv);
 
         competitions = new ArrayList<>();
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
-        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
+        EventViewModel eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
 
         isLoaded();
         loadCompetitions();
@@ -85,13 +79,10 @@ public class CompetitionListFragment extends Fragment {
     }
 
     private void isLoaded() {
-        apiViewModel.IsLoaded().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean isLoaded) {
-                if (isLoaded != null) {
-                    if (isLoaded) {
-                        progressBar.setVisibility(View.GONE);
-                    }
+        apiViewModel.IsLoaded().observe(this, isLoaded -> {
+            if (isLoaded != null) {
+                if (isLoaded) {
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -100,34 +91,32 @@ public class CompetitionListFragment extends Fragment {
     private void loadCompetitions() {
         apiViewModel.getCompetitionResource().observe(this, competitionResource -> {
             competitions.clear();
-            competitions = competitionResource.getCompetitions();
+            competitions = Objects.requireNonNull(competitionResource).getCompetitions();
             populateRecyclerView();
         });
         apiViewModel.getCompetitions();
     }
 
 
-    public void populateRecyclerView() {
+    private void populateRecyclerView() {
         competitionAdapter = new CompetitionAdapter(filterList());
         competitionsRv.setLayoutManager(new GridLayoutManager(getContext(), 1));
         competitionsRv.setAdapter(competitionAdapter);
 
-        competitionAdapter.setOnItemClickListener(new CompetitionAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Competition competition) {
-                Intent intent = new Intent(getActivity(), TeamListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("id", competition.getId());
-                bundle.putString("name", competition.getName());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
+        competitionAdapter.setOnItemClickListener(competition -> {
+            Intent intent = new Intent(getActivity(), TeamListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", competition.getId());
+            bundle.putString("name", competition.getName());
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
-    public List<Competition> filterList() {
+    private List<Competition> filterList() {
         List<Competition> filteredList = new ArrayList<>();
         for (int i = 0; i < competitions.size(); i++) {
+            final String FILTERED_COMP = "Colombia Categoría Primera A";
             if (competitions.get(i).getCompCheck() != 1 && !competitions.get(i).getName().equals(FILTERED_COMP)) {
                 filteredList.add(competitions.get(i));
             }

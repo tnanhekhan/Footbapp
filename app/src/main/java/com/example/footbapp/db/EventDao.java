@@ -12,6 +12,10 @@ import com.example.footbapp.model.Event;
 
 import java.util.List;
 
+/**
+ * Dao class for Subscribed Events
+ *
+ */
 @Dao
 public interface EventDao {
 

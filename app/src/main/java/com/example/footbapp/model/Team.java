@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "favorite_team")
 public class Team implements Parcelable {
     public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {
@@ -25,27 +27,27 @@ public class Team implements Parcelable {
     };
     @NonNull
     @PrimaryKey
-    private String idTeam;
+    private final String idTeam;
     @SerializedName("strTeam")
     @Expose
-    private String teamName;
+    private final String teamName;
     @SerializedName("strTeamBadge")
     @Expose
-    private String badgePath;
+    private final String badgePath;
     @SerializedName("strStadiumLocation")
     @Expose
-    private String location;
+    private final String location;
     @SerializedName("strStadium")
     @Expose
-    private String stadiumName;
+    private final String stadiumName;
     @SerializedName("strStadiumThumb")
     @Expose
-    private String stadiumImage;
+    private final String stadiumImage;
     @SerializedName("strDescriptionEN")
     @Expose
-    private String description;
+    private final String description;
     @SerializedName("strTeamJersey")
-    private String kitImage;
+    private final String kitImage;
 
     public Team(String idTeam, String teamName, String badgePath, String location, String stadiumName, String stadiumImage, String description, String kitImage) {
         this.idTeam = idTeam;
@@ -59,7 +61,7 @@ public class Team implements Parcelable {
     }
 
     public Team(Parcel in) {
-        idTeam = in.readString();
+        idTeam = Objects.requireNonNull(in.readString());
         teamName = in.readString();
         badgePath = in.readString();
         location = in.readString();
@@ -73,64 +75,32 @@ public class Team implements Parcelable {
         return idTeam;
     }
 
-    public void setIdTeam(String idTeam) {
-        this.idTeam = idTeam;
-    }
-
     public String getTeamName() {
         return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
     }
 
     public String getBadgePath() {
         return badgePath;
     }
 
-    public void setBadgePath(String badgePath) {
-        this.badgePath = badgePath;
-    }
-
     public String getLocation() {
         return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getStadiumName() {
         return stadiumName;
     }
 
-    public void setStadiumName(String stadiumName) {
-        this.stadiumName = stadiumName;
-    }
-
     public String getStadiumImage() {
         return stadiumImage;
-    }
-
-    public void setStadiumImage(String stadiumImage) {
-        this.stadiumImage = stadiumImage;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getKitImage() {
         return kitImage;
-    }
-
-    public void setKitImage(String kitImage) {
-        this.kitImage = kitImage;
     }
 
     @Override

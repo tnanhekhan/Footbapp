@@ -25,39 +25,16 @@ public class Competition {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmblemUrl() {
         return emblemUrl;
     }
 
-    public void setEmblemUrl(String emblemUrl) {
-        this.emblemUrl = emblemUrl;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public int getCompCheck() {
         return compCheck;
     }
 
-    public void setCompCheck(int compCheck) {
-        this.compCheck = compCheck;
-    }
 }

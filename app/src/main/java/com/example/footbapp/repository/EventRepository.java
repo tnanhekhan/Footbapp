@@ -10,9 +10,13 @@ import com.example.footbapp.model.Event;
 
 import java.util.List;
 
+/**
+ * Repository class for Subscribed Events
+ *
+ */
 public class EventRepository {
-    private EventDao eventDao;
-    private LiveData<List<Event>> allSubscribedEvents;
+    private final EventDao eventDao;
+    private final LiveData<List<Event>> allSubscribedEvents;
 
     public EventRepository(Application application) {
         TeamDatabase database = TeamDatabase.getInstance(application);
@@ -43,7 +47,7 @@ public class EventRepository {
     }
 
     private static class InsertEventAsyncTask extends AsyncTask<Event, Void, Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         private InsertEventAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;
@@ -57,7 +61,7 @@ public class EventRepository {
     }
 
     private static class DeleteEventAsyncTask extends AsyncTask<Event, Void, Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         private DeleteEventAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;
@@ -71,7 +75,7 @@ public class EventRepository {
     }
 
     private static class UpdateEventAsyncTask extends AsyncTask<Event, Void, Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         private UpdateEventAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;
@@ -85,7 +89,7 @@ public class EventRepository {
     }
 
     private static class DeleteAllEventsAsyncTask extends AsyncTask<Event, Void, Void> {
-        private EventDao eventDao;
+        private final EventDao eventDao;
 
         private DeleteAllEventsAsyncTask(EventDao eventDao) {
             this.eventDao = eventDao;

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FavoriteTeamFragment">
+    tools:context=".fragments.OverviewFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,16 +22,14 @@
             app:tabIndicatorColor="@color/colorPrimary">
 
             <android.support.design.widget.TabItem
-                android:id="@+id/favoriteTeamTabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_favorite_teams" />
 
             <android.support.design.widget.TabItem
-                android:id="@+id/subscribedEventsTabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subscribed Events" />
+                android:text="@string/subscribed_events" />
 
         </android.support.design.widget.TabLayout>
 

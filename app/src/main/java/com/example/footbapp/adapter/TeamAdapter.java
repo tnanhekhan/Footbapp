@@ -18,12 +18,16 @@ import com.example.footbapp.model.Team;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Recyclerview Adapter used in the Team List Activity
+ *
+ */
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> implements Filterable {
-    private List<Team> mTeams;
-    private List<Team> teamListFull;
+    private final List<Team> mTeams;
+    private final List<Team> teamListFull;
     private Context context;
     private OnItemClickListener listener;
-    private Filter teamFilter = new Filter() {
+    private final Filter teamFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Team> filteredList = new ArrayList<>();
@@ -62,8 +66,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.team_row, null);
-        TeamAdapter.ViewHolder viewHolder = new TeamAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -103,8 +106,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView teamTextView;
-        ImageView teamImageView;
+        final TextView teamTextView;
+        final ImageView teamImageView;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -113,14 +116,11 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
             teamImageView = itemView.findViewById(R.id.teamImageView);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
 
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(mTeams.get(position), mTeams.get(position).getTeamName(), teamImageView);
-                    }
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(mTeams.get(position), mTeams.get(position).getTeamName(), teamImageView);
                 }
             });
         }

@@ -1,13 +1,26 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Footbapp</string>
-    <string name="title_home">Home</string>
     <string name="title_overview">Overview</string>
     <string name="title_favorite_teams">Favorite Teams</string>
     <string name="title_settings">Settings</string>
     <string name="All_leagues">All Football Leagues </string>
-    <string name="All_teams">All Teams in the </string>
-    <string name="action_search">Search</string>
+    <string name="team_badge">Team Badge</string>
+    <string name="team_kit">Team Kit</string>
+    <string name="team_stadium">Team Stadium</string>
+    <string name="name_of_stadium">Name of Stadium:</string>
+    <string name="location">Location: %1$s</string>
+    <string name="description">Description:</string>
+    <string name="textview">TextView</string>
+    <string name="competition_logo">Competition Logo</string>
+    <string name="see_upcoming_games">SEE UPCOMING GAMES</string>
+    <string name="subscribed_events">Subscribed Events</string>
+    <string name="clear_all_subscribed_events">CLEAR ALL SUBSCRIBED EVENTS</string>
+    <string name="clear_all_favorite_teams">CLEAR ALL FAVORITE TEAMS</string>
+    <string name="search">Search</string>
+    <string name="stadium_name">Stadium Name: %1$s</string>
+    <string name="deleted_team_toast_message" tools:keep="@string/deleted_team_toast_message">deleted from favorite teams!</string>
+    <string name="inserted_team_toast_message" tools:keep="@string/inserted_team_toast_message">stored as a favorite team!</string>
+    <string name="leagues">Leagues</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

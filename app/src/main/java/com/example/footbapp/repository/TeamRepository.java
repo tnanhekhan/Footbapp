@@ -10,9 +10,13 @@ import com.example.footbapp.model.Team;
 
 import java.util.List;
 
+/**
+ * Repository Class for Favorite Teams
+ *
+ */
 public class TeamRepository {
-    private TeamDao teamDao;
-    private LiveData<List<Team>> allFavoriteTeams;
+    private final TeamDao teamDao;
+    private final LiveData<List<Team>> allFavoriteTeams;
 
     public TeamRepository(Application application) {
         TeamDatabase database = TeamDatabase.getInstance(application);
@@ -43,7 +47,7 @@ public class TeamRepository {
     }
 
     private static class InsertTeamAsyncTask extends AsyncTask<Team, Void, Void> {
-        private TeamDao teamDao;
+        private final TeamDao teamDao;
 
         private InsertTeamAsyncTask(TeamDao teamDao) {
             this.teamDao = teamDao;
@@ -57,7 +61,7 @@ public class TeamRepository {
     }
 
     private static class DeleteTeamAsyncTask extends AsyncTask<Team, Void, Void> {
-        private TeamDao teamDao;
+        private final TeamDao teamDao;
 
         private DeleteTeamAsyncTask(TeamDao teamDao) {
             this.teamDao = teamDao;
@@ -71,7 +75,7 @@ public class TeamRepository {
     }
 
     private static class UpdateTeamAsyncTask extends AsyncTask<Team, Void, Void> {
-        private TeamDao teamDao;
+        private final TeamDao teamDao;
 
         private UpdateTeamAsyncTask(TeamDao teamDao) {
             this.teamDao = teamDao;
@@ -85,7 +89,7 @@ public class TeamRepository {
     }
 
     private static class DeleteAllTeamsAsyncTask extends AsyncTask<Team, Void, Void> {
-        private TeamDao teamDao;
+        private final TeamDao teamDao;
 
         private DeleteAllTeamsAsyncTask(TeamDao teamDao) {
             this.teamDao = teamDao;

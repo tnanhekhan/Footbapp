@@ -15,11 +15,14 @@ import com.example.footbapp.model.Event;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Recyclerview Adapter used in the Event List activity and in the Overview Fragment
+ */
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
-    private List<Event> events;
+    private final List<Event> events;
     private List<Event> subscribedEvents = new ArrayList<>();
-    private Context context;
-    private CheckBoxClickListener listener;
+    private final CheckBoxClickListener listener;
 
 
     public EventAdapter(List<Event> events, CheckBoxClickListener listener) {
@@ -30,11 +33,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
+        Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.event_row, null);
-        EventAdapter.ViewHolder viewHolder = new EventAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -62,10 +64,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.size();
     }
 
-    public List<Event> getSubscribedEvents() {
-        return subscribedEvents;
-    }
-
     public void setSubscribedEvents(List<Event> events) {
         subscribedEvents = events;
     }
@@ -74,26 +72,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.get(position);
     }
 
-    public void setOnItemClickListener(CheckBoxClickListener listener) {
-        this.listener = listener;
-    }
-
     public interface CheckBoxClickListener {
-        void onItemCheck(Event event, CheckBox notificationCheckBox);
+        void onItemCheck(Event event);
 
-        void onItemUnCheck(Event event, CheckBox notificationCheckBox);
+        void onItemUnCheck(Event event);
 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView eventLeagueTextView;
-        TextView eventTimeTextView;
-        TextView eventDateTextView;
-        TextView eventHomeTeamTextView;
-        TextView eventAwayTeamTextView;
-        CheckBox notificationCheckBox;
+        final TextView eventLeagueTextView;
+        final TextView eventTimeTextView;
+        final TextView eventDateTextView;
+        final TextView eventHomeTeamTextView;
+        final TextView eventAwayTeamTextView;
+        final CheckBox notificationCheckBox;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             eventLeagueTextView = itemView.findViewById(R.id.eventLeagueTextView);
@@ -103,32 +97,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventAwayTeamTextView = itemView.findViewById(R.id.eventAwayTeamTextView);
             notificationCheckBox = itemView.findViewById(R.id.notificationCheckBox);
 
-            notificationCheckBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
+            notificationCheckBox.setOnClickListener(v -> {
+                int position = getAdapterPosition();
 
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        if (notificationCheckBox.isChecked()) {
-                            listener.onItemCheck(events.get(position), notificationCheckBox);
-                        } else {
-                            listener.onItemUnCheck(events.get(position), notificationCheckBox);
-                        }
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    if (notificationCheckBox.isChecked()) {
+                        listener.onItemCheck(events.get(position));
+                    } else {
+                        listener.onItemUnCheck(events.get(position));
                     }
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (notificationCheckBox.isChecked()) {
-                        notificationCheckBox.setChecked(false);
-                        listener.onItemUnCheck(events.get(position), notificationCheckBox);
-                    } else {
-                        notificationCheckBox.setChecked(true);
-                        listener.onItemCheck(events.get(position), notificationCheckBox);
-                    }
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (notificationCheckBox.isChecked()) {
+                    notificationCheckBox.setChecked(false);
+                    listener.onItemUnCheck(events.get(position));
+                } else {
+                    notificationCheckBox.setChecked(true);
+                    listener.onItemCheck(events.get(position));
                 }
             });
 

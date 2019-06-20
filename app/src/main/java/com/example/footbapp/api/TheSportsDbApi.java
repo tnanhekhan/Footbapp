@@ -5,6 +5,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Retrofit Api class
+ *
+ */
 public class TheSportsDbApi {
     private static final String BASE_URL = "https://www.thesportsdb.com/api/v1/json/1/";
 
