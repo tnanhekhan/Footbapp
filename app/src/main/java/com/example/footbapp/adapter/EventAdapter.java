@@ -66,6 +66,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         subscribedEvents = events;
     }
 
+    public List<Event> getSubscribedEvents() {
+        return subscribedEvents;
+    }
+
     public Event getEventAt(int position) {
         return events.get(position);
     }

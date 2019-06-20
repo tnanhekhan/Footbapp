@@ -41,6 +41,23 @@ public class Event implements Serializable {
 
     private String idTeam;
 
+    public Event(int idEvent, int intRound, String strEvent, String strHomeTeam,
+                 String strAwayTeam, String dateEvent, String strTime, String idHomeTeam,
+                 String idAwayTeam, String strLeague, boolean subscribed, String idTeam) {
+        this.idEvent = idEvent;
+        this.intRound = intRound;
+        this.strEvent = strEvent;
+        this.strHomeTeam = strHomeTeam;
+        this.strAwayTeam = strAwayTeam;
+        this.dateEvent = dateEvent;
+        this.strTime = strTime;
+        this.idHomeTeam = idHomeTeam;
+        this.idAwayTeam = idAwayTeam;
+        this.strLeague = strLeague;
+        this.subscribed = subscribed;
+        this.idTeam = idTeam;
+    }
+
     public int getIdEvent() {
         return idEvent;
     }

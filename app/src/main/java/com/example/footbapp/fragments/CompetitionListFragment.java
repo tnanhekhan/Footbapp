@@ -1,13 +1,16 @@
 package com.example.footbapp.fragments;
 
 
-import android.animation.LayoutTransition;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,26 +21,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.footbapp.R;
+import com.example.footbapp.activities.MainActivity;
 import com.example.footbapp.activities.TeamListActivity;
 import com.example.footbapp.adapter.CompetitionAdapter;
+import com.example.footbapp.adapter.EventAdapter;
 import com.example.footbapp.model.Competition;
+import com.example.footbapp.model.Event;
 import com.example.footbapp.viewmodel.ApiViewModel;
+import com.example.footbapp.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
 
 
 public class CompetitionListFragment extends Fragment {
     public final String FILTERED_COMP = "Colombia Categoría Primera A";
     private ApiViewModel apiViewModel;
+    private EventViewModel eventViewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
     private CompetitionAdapter competitionAdapter;
     private ProgressBar progressBar;
+
 
     public CompetitionListFragment() {
     }
@@ -67,6 +77,7 @@ public class CompetitionListFragment extends Fragment {
         competitions = new ArrayList<>();
 
         apiViewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
 
         isLoaded();
         loadCompetitions();
@@ -90,7 +101,6 @@ public class CompetitionListFragment extends Fragment {
         apiViewModel.getCompetitionResource().observe(this, competitionResource -> {
             competitions.clear();
             competitions = competitionResource.getCompetitions();
-            System.out.println(competitions);
             populateRecyclerView();
         });
         apiViewModel.getCompetitions();
@@ -147,4 +157,5 @@ public class CompetitionListFragment extends Fragment {
             }
         });
     }
+
 }

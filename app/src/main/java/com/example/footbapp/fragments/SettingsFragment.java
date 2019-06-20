@@ -133,12 +133,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("woop");
-                sendOnChannel1(v);
+                sendOnChannel1();
             }
         });
     }
 
-    public void sendOnChannel1(View v) {
+    public void sendOnChannel1() {
         Intent activityIntent = new Intent(getActivity(), MainActivity.class);
         activityIntent.putExtra("code", "notified");
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -1,5 +1,7 @@
 package com.example.footbapp.fragments;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,11 +25,11 @@ import android.widget.ImageView;
 
 import com.example.footbapp.R;
 import com.example.footbapp.activities.EventListActivity;
+import com.example.footbapp.activities.MainActivity;
 import com.example.footbapp.adapter.EventAdapter;
 import com.example.footbapp.adapter.FavoriteTeamAdapter;
 import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
-import com.example.footbapp.viewmodel.ApiViewModel;
 import com.example.footbapp.viewmodel.EventViewModel;
 import com.example.footbapp.viewmodel.TeamViewModel;
 
@@ -33,10 +37,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
+
 
 public class FavoriteTeamFragment extends Fragment {
     private TeamViewModel teamViewModel;
-    private ApiViewModel apiViewModel;
     private EventViewModel eventViewModel;
     private RecyclerView favoriteTeamsRv;
     private RecyclerView subscribedEventsRv;
@@ -44,6 +49,8 @@ public class FavoriteTeamFragment extends Fragment {
     private EventAdapter eventAdapter;
     private TabLayout favoriteTeamTabLayout;
     private List<Event> subscribedEvents;
+    private NotificationManagerCompat notificationManagerCompat;
+
 
     public FavoriteTeamFragment() {
     }
@@ -63,6 +70,7 @@ public class FavoriteTeamFragment extends Fragment {
         subscribedEventsRv = getActivity().findViewById(R.id.subscribedEventsRv);
         subscribedEventsRv.setVisibility(View.INVISIBLE);
 
+        notificationManagerCompat = NotificationManagerCompat.from(getActivity());
         favoriteTeamTabLayout = getActivity().findViewById(R.id.favoriteTeamTabLayout);
 
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
@@ -125,6 +133,7 @@ public class FavoriteTeamFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 subscribedEvents = new ArrayList<>(events);
+
                 eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
                     @Override
                     public void onItemCheck(Event event, CheckBox notificationCheckBox) {
@@ -147,6 +156,7 @@ public class FavoriteTeamFragment extends Fragment {
                 });
 
                 eventAdapter.setSubscribedEvents(subscribedEvents);
+                sendOnChannel1(subscribedEvents);
                 populateEventRecyclerView();
             }
         });
@@ -217,6 +227,25 @@ public class FavoriteTeamFragment extends Fragment {
 
             }
         }).attachToRecyclerView(favoriteTeamsRv);
+    }
+
+    public void sendOnChannel1(List<Event> list) {
+        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
+        activityIntent.putExtra("code", "notified");
+        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Notification notification = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_soccer_ball)
+                .setContentTitle(list.get(0).getStrEvent())
+                .setContentText("Starting at " + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_EVENT)
+                .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        notificationManagerCompat.notify(1, notification);
     }
 
 }
