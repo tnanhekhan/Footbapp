@@ -92,6 +92,7 @@ public class EventListActivity extends AppCompatActivity {
         eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
             @Override
             public void onItemCheck(Event event, CheckBox notificationCheckBox) {
+                event.setIdTeam(team.getIdTeam());
                 eventViewModel.insert(event);
                 event.setSubscribed(true);
                 Toast.makeText(EventListActivity.this,
