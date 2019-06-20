@@ -3,15 +3,20 @@ package com.example.footbapp;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Build;
+
+import com.example.footbapp.viewmodel.EventViewModel;
 
 public class Footbapp extends Application {
     public static final String CHANNEL_1_ID = "Subscribed Events";
+    private EventViewModel eventViewModel;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+//        eventViewModel = ViewModelProviders.of().get(EventViewModel.class);
         createNotificationChannels();
     }
 

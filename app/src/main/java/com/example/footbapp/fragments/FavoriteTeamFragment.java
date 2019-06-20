@@ -71,6 +71,18 @@ public class FavoriteTeamFragment extends Fragment {
         loadFavoriteTeams();
         loadSubscribedEvents();
 
+        Intent intent = getActivity().getIntent();
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.containsKey("code")) {
+                favoriteTeamTabLayout.getTabAt(1).select();
+                favoriteTeamsRv.setVisibility(View.INVISIBLE);
+                subscribedEventsRv.setVisibility(View.VISIBLE);
+                intent.removeExtra("code");
+            }
+        }
+
         favoriteTeamTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

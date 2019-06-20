@@ -2,8 +2,10 @@ package com.example.footbapp.fragments;
 
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.footbapp.R;
+import com.example.footbapp.activities.MainActivity;
 import com.example.footbapp.model.Event;
 import com.example.footbapp.model.Team;
 import com.example.footbapp.viewmodel.EventViewModel;
@@ -133,6 +136,11 @@ public class SettingsFragment extends Fragment {
     }
 
     public void sendOnChannel1(View v) {
+        Intent activityIntent = new Intent(getActivity(), MainActivity.class);
+        activityIntent.putExtra("code", "notified");
+        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         Notification notification = new NotificationCompat.Builder(getActivity(), CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_soccer_ball)
                 .setContentTitle("Test title")
@@ -140,6 +148,7 @@ public class SettingsFragment extends Fragment {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_EVENT)
                 .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
                 .build();
 
         notificationManagerCompat.notify(1, notification);
