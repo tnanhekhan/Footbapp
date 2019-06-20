@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.footbapp.R;
@@ -19,11 +19,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private List<Event> events;
     private List<Event> subscribedEvents = new ArrayList<>();
     private Context context;
-    private OnItemClickListener listener;
+    private CheckBoxClickListener listener;
 
 
-    public EventAdapter(List<Event> events) {
+    public EventAdapter(List<Event> events, CheckBoxClickListener listener) {
         this.events = events;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,12 +45,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         viewHolder.eventHomeTeamTextView.setText(events.get(i).getStrHomeTeam());
         viewHolder.eventAwayTeamTextView.setText(events.get(i).getStrAwayTeam());
         if (events.get(i).getDateEvent() == null) {
-            viewHolder.notificationIconImageView.setVisibility(View.INVISIBLE);
+            viewHolder.notificationCheckBox.setVisibility(View.INVISIBLE);
         }
 
         for (int j = 0; j < subscribedEvents.size(); j++) {
             if (subscribedEvents.get(j).getIdEvent() == events.get(i).getIdEvent()) {
-                viewHolder.notificationIconImageView.setImageResource(R.drawable.ic_notifications_black_24dp);
+                viewHolder.notificationCheckBox.setChecked(true);
                 events.get(i).setSubscribed(true);
             }
         }
@@ -75,7 +76,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         TextView eventDateTextView;
         TextView eventHomeTeamTextView;
         TextView eventAwayTeamTextView;
-        ImageView notificationIconImageView;
+        CheckBox notificationCheckBox;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,15 +86,34 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventDateTextView = itemView.findViewById(R.id.eventDateTextView);
             eventHomeTeamTextView = itemView.findViewById(R.id.eventHomeTeamTextView);
             eventAwayTeamTextView = itemView.findViewById(R.id.eventAwayTeamTextView);
-            notificationIconImageView = itemView.findViewById(R.id.notificationIconImageView);
+            notificationCheckBox = itemView.findViewById(R.id.notificationCheckBox);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            notificationCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
 
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(events.get(position), notificationIconImageView);
+                        if (notificationCheckBox.isChecked()) {
+                            listener.onItemCheck(events.get(position), notificationCheckBox);
+                        } else {
+                            listener.onItemUnCheck(events.get(position), notificationCheckBox);
+                        }
+                    }
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (notificationCheckBox.isChecked()) {
+                        System.out.println("checked");
+                        listener.onItemCheck(events.get(position), notificationCheckBox);
+                    } else {
+                        System.out.println("not checked");
+                        listener.onItemUnCheck(events.get(position), notificationCheckBox);
+
                     }
                 }
             });
@@ -101,11 +121,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Event event, ImageView notificationIcon);
+    public interface CheckBoxClickListener {
+        void onItemCheck(Event event, CheckBox notificationCheckBox);
+
+        void onItemUnCheck(Event event, CheckBox notificationCheckBox);
+
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(CheckBoxClickListener listener) {
         this.listener = listener;
     }
 }

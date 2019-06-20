@@ -16,6 +16,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.example.footbapp.R;
@@ -112,7 +113,27 @@ public class FavoriteTeamFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 subscribedEvents = new ArrayList<>(events);
-                eventAdapter = new EventAdapter(events);
+                eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
+                    @Override
+                    public void onItemCheck(Event event, CheckBox notificationCheckBox) {
+
+                    }
+
+                    @Override
+                    public void onItemUnCheck(Event event, CheckBox notificationCheckBox) {
+                        final Event deletedEvent = event;
+                        String deletedEventName = deletedEvent.getStrEvent();
+                        eventViewModel.delete(event);
+                        Snackbar.make(favoriteTeamsRv, "Unsubscribed from " + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        eventViewModel.insert(deletedEvent);
+                                    }
+                                }).setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary)).show();
+                    }
+                });
+
                 eventAdapter.setSubscribedEvents(subscribedEvents);
                 populateEventRecyclerView();
             }

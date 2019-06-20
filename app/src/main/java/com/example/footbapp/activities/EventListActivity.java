@@ -9,7 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -89,34 +89,24 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     private void populateRecyclerView() {
-        eventAdapter = new EventAdapter(events);
+        eventAdapter = new EventAdapter(events, new EventAdapter.CheckBoxClickListener() {
+            @Override
+            public void onItemCheck(Event event, CheckBox notificationCheckBox) {
+                eventViewModel.insert(event);
+                event.setSubscribed(true);
+            }
+
+            @Override
+            public void onItemUnCheck(Event event, CheckBox notificationCheckBox) {
+                eventViewModel.delete(event);
+            }
+        });
         eventAdapter.setSubscribedEvents(subscribedEvents);
         eventsRv.setLayoutManager(new GridLayoutManager(this, 1));
         eventsRv.setAdapter(eventAdapter);
 
-        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Event event, ImageView notificationIcon) {
-                if (event.getDateEvent() != null) {
-                    if (!event.isSubscribed()) {
-                        event.setIdTeam(team.getIdTeam());
-                        eventViewModel.insert(event);
-                        Toast.makeText(EventListActivity.this,
-                                "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
-                                Toast.LENGTH_SHORT).show();
-                        notificationIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
-                    } else if (event.isSubscribed()) {
-                        eventViewModel.delete(event);
-                        Toast.makeText(EventListActivity.this,
-                                "Unsubscribed from " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
-                                Toast.LENGTH_SHORT).show();
-                        notificationIcon.setImageResource(R.drawable.ic_notifications_off_black_24dp);
-                    }
-                }
-            }
-        });
     }
-
+    
     @Override
     public boolean onSupportNavigateUp() {
         finish();
