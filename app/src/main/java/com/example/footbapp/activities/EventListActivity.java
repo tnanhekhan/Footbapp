@@ -94,11 +94,17 @@ public class EventListActivity extends AppCompatActivity {
             public void onItemCheck(Event event, CheckBox notificationCheckBox) {
                 eventViewModel.insert(event);
                 event.setSubscribed(true);
+                Toast.makeText(EventListActivity.this,
+                        "Subscribed to " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemUnCheck(Event event, CheckBox notificationCheckBox) {
                 eventViewModel.delete(event);
+                Toast.makeText(EventListActivity.this,
+                        "Unsubscribed from " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
         eventAdapter.setSubscribedEvents(subscribedEvents);
@@ -106,7 +112,7 @@ public class EventListActivity extends AppCompatActivity {
         eventsRv.setAdapter(eventAdapter);
 
     }
-    
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
