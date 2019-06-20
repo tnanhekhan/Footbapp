@@ -17,6 +17,10 @@ import com.example.footbapp.fragments.SettingsFragment;
  *
  */
 public class MainActivity extends AppCompatActivity {
+    private final String INTENT_NOTIFICATION_CODE = "code";
+    private final String THIRD_FRAGMENT_ID = "3";
+    private final String SECOND_FRAGMENT_ID = "2";
+    private final String FIRST_FRAGMENT_ID = "1";
     private final Fragment competitionListFragment = new CompetitionListFragment();
     private final Fragment favoriteTeamFragment = new OverviewFragment();
     private final Fragment settingsFragment = new SettingsFragment();
@@ -53,18 +57,18 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            if (extras.containsKey("code")) {
+            if (extras.containsKey(INTENT_NOTIFICATION_CODE)) {
                 active = favoriteTeamFragment;
-                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, settingsFragment, "3").hide(settingsFragment).commit();
-                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, competitionListFragment, "2").hide(competitionListFragment).commit();
-                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, favoriteTeamFragment, "1").commit();
+                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, settingsFragment, THIRD_FRAGMENT_ID).hide(settingsFragment).commit();
+                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, competitionListFragment, SECOND_FRAGMENT_ID).hide(competitionListFragment).commit();
+                fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, favoriteTeamFragment, FIRST_FRAGMENT_ID).commit();
                 navView.setSelectedItemId(R.id.navigation_overview);
 
             }
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, settingsFragment, "3").hide(settingsFragment).commit();
-            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, favoriteTeamFragment, "2").hide(favoriteTeamFragment).commit();
-            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, competitionListFragment, "1").commit();
+            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, settingsFragment, THIRD_FRAGMENT_ID).hide(settingsFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, favoriteTeamFragment, SECOND_FRAGMENT_ID).hide(favoriteTeamFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fragmentHolderLayout, competitionListFragment, FIRST_FRAGMENT_ID).commit();
 
         }
     }

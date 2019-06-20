@@ -18,9 +18,17 @@
     <string name="clear_all_favorite_teams">CLEAR ALL FAVORITE TEAMS</string>
     <string name="search">Search</string>
     <string name="stadium_name">Stadium Name: %1$s</string>
-    <string name="deleted_team_toast_message" tools:keep="@string/deleted_team_toast_message">deleted from favorite teams!</string>
-    <string name="inserted_team_toast_message" tools:keep="@string/inserted_team_toast_message">stored as a favorite team!</string>
+    <string name="deleted_team_toast_message" tools:keep="@string/deleted_team_toast_message"> deleted from favorite teams!</string>
+    <string name="inserted_team_toast_message" tools:keep="@string/inserted_team_toast_message"> stored as a favorite team!</string>
     <string name="leagues">Leagues</string>
+    <string name="cleared_all_favorite_teams">Cleared all favorite teams!</string>
+    <string name="cleared_all_subscribed_events">Cleared all subscribed events!</string>
+    <string name="removed">Removed </string>
+    <string name="from_favorite_teams"> from favorite teams!</string>
+    <string name="no_events_available_for">No events available for </string>
+    <string name="subscribed_to">Subscribed to </string>
+    <string name="unsubscribed_from">Unsubscribed from </string>
+    <string name="upcoming_games">Upcoming Games</string>
+    <string name="starting_at">Starting at </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
 </resources>

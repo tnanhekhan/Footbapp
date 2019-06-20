@@ -31,7 +31,9 @@ import java.util.Objects;
  *
  */
 public class TeamListActivity extends AppCompatActivity {
-    private final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
+    private static final String INTENT_COMPETITION_ID = "id";
+    private static final String INTENT_COMPETITION_NAME = "name";
+    private static final String INTENT_SELECTED_TEAM_KEY = "team";
     private List<Team> teams;
     private RecyclerView teamsRv;
     private TeamAdapter teamAdapter;
@@ -47,13 +49,13 @@ public class TeamListActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        int id = Objects.requireNonNull(bundle).getInt("id");
+        int id = Objects.requireNonNull(bundle).getInt(INTENT_COMPETITION_ID);
 
         teamsRv = findViewById(R.id.teamsRv);
         progressBar = findViewById(R.id.teamListProgressBar);
 
         teams = new ArrayList<>();
-        competitionName = bundle.getString("name");
+        competitionName = bundle.getString(INTENT_COMPETITION_NAME);
         setTitle(competitionName);
 
         viewModel = ViewModelProviders.of(this).get(ApiViewModel.class);
@@ -80,7 +82,7 @@ public class TeamListActivity extends AppCompatActivity {
                 populateRecyclerView();
             } else {
                 Toast.makeText(TeamListActivity.this,
-                        NO_EVENTS_TOAST_MESSAGE + competitionName + "!",
+                        getString(R.string.no_events_available_for) + " "+ competitionName + "!",
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -94,7 +96,7 @@ public class TeamListActivity extends AppCompatActivity {
 
         teamAdapter.setOnItemClickListener((team, teamName, teamImageView) -> {
             Intent intent = new Intent(TeamListActivity.this, TeamOverviewActivity.class);
-            intent.putExtra("team", team);
+            intent.putExtra(INTENT_SELECTED_TEAM_KEY, team);
             ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                     .makeSceneTransitionAnimation(
                             TeamListActivity.this,

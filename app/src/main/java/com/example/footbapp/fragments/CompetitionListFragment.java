@@ -36,6 +36,8 @@ import java.util.Objects;
  *
  */
 public class CompetitionListFragment extends Fragment {
+    private static final String PASSED_COMPETITION_ID = "id";
+    private static final String PASSED_COMPETITION_NAME = "name";
     private ApiViewModel apiViewModel;
     private List<Competition> competitions;
     private RecyclerView competitionsRv;
@@ -106,8 +108,8 @@ public class CompetitionListFragment extends Fragment {
         competitionAdapter.setOnItemClickListener(competition -> {
             Intent intent = new Intent(getActivity(), TeamListActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putInt("id", competition.getId());
-            bundle.putString("name", competition.getName());
+            bundle.putInt(PASSED_COMPETITION_ID, competition.getId());
+            bundle.putString(PASSED_COMPETITION_NAME, competition.getName());
             intent.putExtras(bundle);
             startActivity(intent);
         });
@@ -116,8 +118,8 @@ public class CompetitionListFragment extends Fragment {
     private List<Competition> filterList() {
         List<Competition> filteredList = new ArrayList<>();
         for (int i = 0; i < competitions.size(); i++) {
-            final String FILTERED_COMP = "Colombia Categoría Primera A";
-            if (competitions.get(i).getCompCheck() != 1 && !competitions.get(i).getName().equals(FILTERED_COMP)) {
+            final String filteredComp = "Colombia Categoría Primera A";
+            if (competitions.get(i).getCompCheck() != 1 && !competitions.get(i).getName().equals(filteredComp)) {
                 filteredList.add(competitions.get(i));
             }
         }

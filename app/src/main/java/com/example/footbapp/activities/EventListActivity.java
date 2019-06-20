@@ -24,10 +24,7 @@ import java.util.Objects;
  * Activity class for the Event List Activity
  */
 public class EventListActivity extends AppCompatActivity {
-    private final String SUBTITLE_ACTIVITY = "Upcoming Games";
-    private final String NO_EVENTS_TOAST_MESSAGE = "No events available for ";
-    private final String SUBSCRIBED_EVENT_TOAST_MESSAGE = "Subscribed to ";
-    private final String UNSUBSCRIBED_EVENT_TOAST_MESSAGE = "Unsubscribed from ";
+    private final String INTENT_TEAM_KEY = "team";
     private Team team;
     private RecyclerView eventsRv;
     private List<Event> events;
@@ -43,10 +40,10 @@ public class EventListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_list);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        team = Objects.requireNonNull(getIntent().getExtras()).getParcelable("team");
+        team = Objects.requireNonNull(getIntent().getExtras()).getParcelable(INTENT_TEAM_KEY);
 
         setTitle(Objects.requireNonNull(team).getTeamName());
-        getSupportActionBar().setSubtitle(SUBTITLE_ACTIVITY);
+        getSupportActionBar().setSubtitle(getString(R.string.upcoming_games));
 
         events = new ArrayList<>();
         subscribedEvents = (List<Event>) getIntent().getSerializableExtra("subscribedEvents");
@@ -86,7 +83,7 @@ public class EventListActivity extends AppCompatActivity {
                 events = eventResource.getEvents();
             } else {
                 Toast.makeText(EventListActivity.this,
-                        NO_EVENTS_TOAST_MESSAGE + team.getTeamName() + "!",
+                        getString(R.string.no_events_available_for) + " " + team.getTeamName() + "!",
                         Toast.LENGTH_SHORT).show();
             }
             populateRecyclerView();
@@ -106,7 +103,7 @@ public class EventListActivity extends AppCompatActivity {
                 eventViewModel.insert(event);
                 event.setSubscribed(true);
                 Toast.makeText(EventListActivity.this,
-                        SUBSCRIBED_EVENT_TOAST_MESSAGE + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                        getString(R.string.subscribed_to) + " " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -114,7 +111,7 @@ public class EventListActivity extends AppCompatActivity {
             public void onItemUnCheck(Event event) {
                 eventViewModel.delete(event);
                 Toast.makeText(EventListActivity.this,
-                        UNSUBSCRIBED_EVENT_TOAST_MESSAGE + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
+                        getString(R.string.unsubscribed_from) + " " + event.getStrHomeTeam() + " - " + event.getStrAwayTeam() + "!",
                         Toast.LENGTH_SHORT).show();
             }
         });

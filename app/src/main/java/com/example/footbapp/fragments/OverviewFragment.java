@@ -43,8 +43,10 @@ import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
  *
  */
 public class OverviewFragment extends Fragment {
-    private static final String UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE = "Unsubscribed from ";
-    private static final String NOTIFICATION_BODY_MESSAGE = "Starting at ";
+    private final String INTENT_NOTIFICATION_CODE = "code";
+    private final String INTENT_NOTIFICATION_VALUE = "notified";
+    private final String PASSED_TEAM_OBJECT = "team";
+    private final String PASSED_EVENT_LIST = "subscribedEvents";
     private TeamViewModel teamViewModel;
     private EventViewModel eventViewModel;
     private RecyclerView favoriteTeamsRv;
@@ -86,11 +88,11 @@ public class OverviewFragment extends Fragment {
 
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            if (extras.containsKey("code")) {
+            if (extras.containsKey(INTENT_NOTIFICATION_CODE)) {
                 Objects.requireNonNull(favoriteTeamTabLayout.getTabAt(1)).select();
                 favoriteTeamsRv.setVisibility(View.INVISIBLE);
                 subscribedEventsRv.setVisibility(View.VISIBLE);
-                intent.removeExtra("code");
+                intent.removeExtra(INTENT_NOTIFICATION_CODE);
             }
         }
 
@@ -143,7 +145,7 @@ public class OverviewFragment extends Fragment {
                     final Event deletedEvent = event;
                     String deletedEventName = deletedEvent.getStrEvent();
                     eventViewModel.delete(event);
-                    Snackbar.make(favoriteTeamsRv, UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(favoriteTeamsRv, getString(R.string.unsubscribed_from) + deletedEventName + "!", Snackbar.LENGTH_LONG)
                             .setAction("UNDO", v -> eventViewModel.insert(deletedEvent)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
                 }
             });
@@ -170,7 +172,7 @@ public class OverviewFragment extends Fragment {
                 final Event deletedEvent = eventAdapter.getEventAt(viewHolder.getAdapterPosition());
                 String deletedEventName = deletedEvent.getStrEvent();
                 eventViewModel.delete(eventAdapter.getEventAt(viewHolder.getAdapterPosition()));
-                Snackbar.make(favoriteTeamsRv, UNSUBSCRIBED_EVENT_SNACKBAR_MESSAGE + deletedEventName + "!", Snackbar.LENGTH_LONG)
+                Snackbar.make(favoriteTeamsRv, getString(R.string.unsubscribed_from) + " " + deletedEventName + "!", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", v -> eventViewModel.insert(deletedEvent)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
 
             }
@@ -184,8 +186,8 @@ public class OverviewFragment extends Fragment {
 
         favoriteTeamAdapter.setOnItemClickListener(team -> {
             Intent intent = new Intent(getActivity(), EventListActivity.class);
-            intent.putExtra("team", team);
-            intent.putExtra("subscribedEvents", (Serializable) subscribedEvents);
+            intent.putExtra(PASSED_TEAM_OBJECT, team);
+            intent.putExtra(PASSED_EVENT_LIST, (Serializable) subscribedEvents);
 
             startActivity(intent);
         });
@@ -201,7 +203,7 @@ public class OverviewFragment extends Fragment {
                 final Team deletedTeam = favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition());
                 String deletedTeamName = deletedTeam.getTeamName();
                 teamViewModel.delete(favoriteTeamAdapter.getTeamAt(viewHolder.getAdapterPosition()));
-                Snackbar.make(favoriteTeamsRv, "Removed " + deletedTeamName + " from favorite teams!", Snackbar.LENGTH_LONG)
+                Snackbar.make(favoriteTeamsRv, getString(R.string.removed) + " " + deletedTeamName + " " + getString(R.string.from_favorite_teams), Snackbar.LENGTH_LONG)
                         .setAction("UNDO", v -> teamViewModel.insert(deletedTeam)).setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary)).show();
 
             }
@@ -210,14 +212,14 @@ public class OverviewFragment extends Fragment {
 
     private void sendOnChannel1(List<Event> list) {
         Intent activityIntent = new Intent(getActivity(), MainActivity.class);
-        activityIntent.putExtra("code", "notified");
+        activityIntent.putExtra(INTENT_NOTIFICATION_CODE, INTENT_NOTIFICATION_VALUE);
         PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 1, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if(!list.isEmpty()){
             Notification notification = new NotificationCompat.Builder(Objects.requireNonNull(getActivity()), CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_soccer_ball)
                     .setContentTitle(list.get(0).getStrEvent())
-                    .setContentText(NOTIFICATION_BODY_MESSAGE + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
+                    .setContentText(getString(R.string.starting_at) + " " + list.get(0).getDateEvent() + " " + list.get(0).getStrTime())
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)

@@ -70,7 +70,7 @@ public class SettingsFragment extends Fragment {
 
             teamViewModel.deleteAllFavoriteTeams();
 
-            Snackbar.make(v, "Cleared all favorite teams!", Snackbar.LENGTH_LONG)
+            Snackbar.make(v, getString(R.string.cleared_all_favorite_teams), Snackbar.LENGTH_LONG)
                     .setAction("UNDO", v12 -> {
                         for (int i = 0; i < favoriteTeamsBackup.size(); i++) {
                             teamViewModel.insert(favoriteTeamsBackup.get(i));
@@ -90,7 +90,7 @@ public class SettingsFragment extends Fragment {
 
             eventViewModel.deletAllSubscribedEvents();
 
-            Snackbar.make(v, "Cleared all subscribed events!", Snackbar.LENGTH_LONG)
+            Snackbar.make(v, getString(R.string.cleared_all_subscribed_events), Snackbar.LENGTH_LONG)
                     .setAction("UNDO", v1 -> {
                         for (int i = 0; i < subscribedEventsBackup.size(); i++) {
                             eventViewModel.insert(subscribedEventsBackup.get(i));

@@ -24,8 +24,10 @@ import java.util.Objects;
  *
  */
 public class TeamOverviewActivity extends AppCompatActivity {
-    private final String DELETED_TEAM_TOAST_MESSAGE = "deleted from favorite teams!";
-    private final String INSERTED_TEAM_TOAST_MESSAGE = "stored as a favorite team!";
+    private final int HANDLER_DELAY_MILLIS = 500;
+    private final float PROGESS_BAR_STROKE_WIDTH = 5f;
+    private final float PROGRESS_BAR_CENTER_RADIUS = 30f;
+    private final String INTENT_TEAM_KEY = "team";
     private Team team;
     private ImageView stadiumImageView;
     private TeamViewModel teamViewModel;
@@ -40,7 +42,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_overview);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        team = Objects.requireNonNull(getIntent().getExtras()).getParcelable("team");
+        team = Objects.requireNonNull(getIntent().getExtras()).getParcelable(INTENT_TEAM_KEY);
         initializeComponents();
 
         Handler handler = new Handler();
@@ -48,14 +50,14 @@ public class TeamOverviewActivity extends AppCompatActivity {
             if (stadiumImageView.getDrawable() == null) {
                 stadiumImageView.setVisibility(View.GONE);
             }
-        }, 500);
+        }, HANDLER_DELAY_MILLIS);
 
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
         teamViewModel.getAllFavoriteTeams().observe(this, teams -> checkDatabase(Objects.requireNonNull(teams)));
 
         progressBar = new CircularProgressDrawable(this);
-        progressBar.setStrokeWidth(5f);
-        progressBar.setCenterRadius(30f);
+        progressBar.setStrokeWidth(PROGESS_BAR_STROKE_WIDTH);
+        progressBar.setCenterRadius(PROGRESS_BAR_CENTER_RADIUS);
         progressBar.setBackgroundColor(R.color.colorPrimary);
     }
 
@@ -105,11 +107,11 @@ public class TeamOverviewActivity extends AppCompatActivity {
         favoriteButton.setOnClickListener(v -> {
             if (favorited) {
                 teamViewModel.delete(team);
-                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + DELETED_TEAM_TOAST_MESSAGE, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " " + getString(R.string.deleted_team_toast_message), Toast.LENGTH_SHORT).show();
                 favoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             } else {
                 teamViewModel.insert(team);
-                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + INSERTED_TEAM_TOAST_MESSAGE, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TeamOverviewActivity.this, team.getTeamName() + " " + getString(R.string.inserted_team_toast_message), Toast.LENGTH_SHORT).show();
                 favoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
             }
         });
