@@ -23,7 +23,33 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
     private List<Team> teamListFull;
     private Context context;
     private OnItemClickListener listener;
+    private Filter teamFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Team> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(teamListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
 
+                for (Team team : teamListFull) {
+                    if (team.getTeamName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(team);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mTeams.clear();
+            mTeams.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public TeamAdapter(List<Team> mTeams) {
         this.mTeams = mTeams;
@@ -68,34 +94,13 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
         return teamFilter;
     }
 
-    private Filter teamFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Team> filteredList = new ArrayList<>();
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(teamListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
-                for (Team team : teamListFull) {
-                    if (team.getTeamName().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(team);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            mTeams.clear();
-            mTeams.addAll((List) results.values);
-            notifyDataSetChanged();
-        }
-    };
-
+    public interface OnItemClickListener {
+        void onItemClick(Team team, String teamName, ImageView imageView);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView teamTextView;
@@ -119,13 +124,5 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> im
                 }
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(Team team, String teamName, ImageView imageView);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }

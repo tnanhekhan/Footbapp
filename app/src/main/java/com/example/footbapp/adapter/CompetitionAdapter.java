@@ -23,7 +23,33 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
     private List<Competition> competitionsListFull;
     private Context context;
     private OnItemClickListener listener;
+    private Filter competitionFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Competition> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(competitionsListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
 
+                for (Competition competition : competitionsListFull) {
+                    if (competition.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(competition);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mCompetitions.clear();
+            mCompetitions.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public CompetitionAdapter(List<Competition> mCompetitions) {
         this.mCompetitions = mCompetitions;
@@ -56,34 +82,13 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
         return competitionFilter;
     }
 
-    private Filter competitionFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Competition> filteredList = new ArrayList<>();
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(competitionsListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
-                for (Competition competition : competitionsListFull) {
-                    if (competition.getName().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(competition);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            mCompetitions.clear();
-            mCompetitions.addAll((List) results.values);
-            notifyDataSetChanged();
-        }
-    };
-
+    public interface OnItemClickListener {
+        void onItemClick(Competition competition);
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView competitionTextView;
@@ -104,13 +109,5 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
                 }
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(Competition competition);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }

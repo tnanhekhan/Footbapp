@@ -76,7 +76,7 @@ public class TeamOverviewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        supportFinishAfterTransition();;
+        supportFinishAfterTransition();
     }
 
     public void checkDatabase(List<Team> teams) {

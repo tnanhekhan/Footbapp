@@ -11,33 +11,39 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "favorite_team")
 public class Team implements Parcelable {
+    public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {
+
+        @Override
+        public Team createFromParcel(Parcel source) {
+            return new Team(source);
+        }
+
+        @Override
+        public Team[] newArray(int size) {
+            return new Team[size];
+        }
+    };
     @NonNull
     @PrimaryKey
     private String idTeam;
     @SerializedName("strTeam")
     @Expose
     private String teamName;
-
     @SerializedName("strTeamBadge")
     @Expose
     private String badgePath;
-
     @SerializedName("strStadiumLocation")
     @Expose
     private String location;
-
     @SerializedName("strStadium")
     @Expose
     private String stadiumName;
-
     @SerializedName("strStadiumThumb")
     @Expose
     private String stadiumImage;
-
     @SerializedName("strDescriptionEN")
     @Expose
     private String description;
-
     @SerializedName("strTeamJersey")
     private String kitImage;
 
@@ -50,6 +56,17 @@ public class Team implements Parcelable {
         this.stadiumImage = stadiumImage;
         this.description = description;
         this.kitImage = kitImage;
+    }
+
+    public Team(Parcel in) {
+        idTeam = in.readString();
+        teamName = in.readString();
+        badgePath = in.readString();
+        location = in.readString();
+        stadiumName = in.readString();
+        stadiumImage = in.readString();
+        description = in.readString();
+        kitImage = in.readString();
     }
 
     public String getIdTeam() {
@@ -132,28 +149,4 @@ public class Team implements Parcelable {
         dest.writeString(description);
         dest.writeString(kitImage);
     }
-
-    public Team(Parcel in) {
-        idTeam = in.readString();
-        teamName = in.readString();
-        badgePath = in.readString();
-        location = in.readString();
-        stadiumName = in.readString();
-        stadiumImage = in.readString();
-        description = in.readString();
-        kitImage = in.readString();
-    }
-
-    public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {
-
-        @Override
-        public Team createFromParcel(Parcel source) {
-            return new Team(source);
-        }
-
-        @Override
-        public Team[] newArray(int size) {
-            return new Team[size];
-        }
-    };
 }

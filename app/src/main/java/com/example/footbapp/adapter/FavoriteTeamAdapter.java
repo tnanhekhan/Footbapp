@@ -50,6 +50,14 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
         return favoriteTeams.get(position);
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Team team, String teamName, ImageView imageView);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView favoriteTeamNameTextView;
         ImageView favoriteTeamImageView;
@@ -71,13 +79,5 @@ public class FavoriteTeamAdapter extends RecyclerView.Adapter<FavoriteTeamAdapte
                 }
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(Team team, String teamName, ImageView imageView);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 }

@@ -62,16 +62,27 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.size();
     }
 
-    public void setSubscribedEvents(List<Event> events) {
-        subscribedEvents = events;
-    }
-
     public List<Event> getSubscribedEvents() {
         return subscribedEvents;
     }
 
+    public void setSubscribedEvents(List<Event> events) {
+        subscribedEvents = events;
+    }
+
     public Event getEventAt(int position) {
         return events.get(position);
+    }
+
+    public void setOnItemClickListener(CheckBoxClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface CheckBoxClickListener {
+        void onItemCheck(Event event, CheckBox notificationCheckBox);
+
+        void onItemUnCheck(Event event, CheckBox notificationCheckBox);
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,16 +133,5 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             });
 
         }
-    }
-
-    public interface CheckBoxClickListener {
-        void onItemCheck(Event event, CheckBox notificationCheckBox);
-
-        void onItemUnCheck(Event event, CheckBox notificationCheckBox);
-
-    }
-
-    public void setOnItemClickListener(CheckBoxClickListener listener) {
-        this.listener = listener;
     }
 }

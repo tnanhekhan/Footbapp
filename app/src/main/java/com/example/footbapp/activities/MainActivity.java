@@ -1,18 +1,11 @@
 package com.example.footbapp.activities;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,13 +14,6 @@ import com.example.footbapp.R;
 import com.example.footbapp.fragments.CompetitionListFragment;
 import com.example.footbapp.fragments.FavoriteTeamFragment;
 import com.example.footbapp.fragments.SettingsFragment;
-import com.example.footbapp.model.Event;
-import com.example.footbapp.viewmodel.EventViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
 
 public class MainActivity extends AppCompatActivity {
     private final Fragment competitionListFragment = new CompetitionListFragment();

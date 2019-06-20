@@ -14,7 +14,7 @@ public interface TheSportsDbService {
     Call<CompetitionResource> getCompetitions(@Query("s") String sport);
 
     @GET("lookup_all_teams.php")
-    Call<TeamResource>getCompetitionById(@Query("id") String competitionId);
+    Call<TeamResource> getCompetitionById(@Query("id") String competitionId);
 
     @GET("eventsnext.php")
     Call<EventResource> getEventsById(@Query("id") String teamId);

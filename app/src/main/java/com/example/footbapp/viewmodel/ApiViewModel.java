@@ -5,8 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.example.footbapp.api.FootballRepository;
-import com.example.footbapp.api.TheSportsDbRepository;
+import com.example.footbapp.repository.TheSportsDbRepository;
 import com.example.footbapp.model.CompetitionResource;
 import com.example.footbapp.model.EventResource;
 import com.example.footbapp.model.TeamResource;
@@ -16,7 +15,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApiViewModel extends AndroidViewModel {
-    private FootballRepository footballRepository = new FootballRepository();
     private TheSportsDbRepository theSportsDbRepository = new TheSportsDbRepository();
 
     private MutableLiveData<CompetitionResource> competitionResource = new MutableLiveData<>();

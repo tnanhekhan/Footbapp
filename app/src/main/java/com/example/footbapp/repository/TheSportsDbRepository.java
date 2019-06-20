@@ -1,5 +1,7 @@
-package com.example.footbapp.api;
+package com.example.footbapp.repository;
 
+import com.example.footbapp.api.TheSportsDbApi;
+import com.example.footbapp.api.TheSportsDbService;
 import com.example.footbapp.model.CompetitionResource;
 import com.example.footbapp.model.EventResource;
 import com.example.footbapp.model.TeamResource;
