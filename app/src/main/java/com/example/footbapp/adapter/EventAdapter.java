@@ -108,12 +108,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (notificationCheckBox.isChecked()) {
-                        System.out.println("checked");
-                        listener.onItemCheck(events.get(position), notificationCheckBox);
-                    } else {
-                        System.out.println("not checked");
+                        notificationCheckBox.setChecked(false);
                         listener.onItemUnCheck(events.get(position), notificationCheckBox);
-
+                    } else {
+                        notificationCheckBox.setChecked(true);
+                        listener.onItemCheck(events.get(position), notificationCheckBox);
                     }
                 }
             });

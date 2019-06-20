@@ -1,10 +1,12 @@
 package com.example.footbapp.fragments;
 
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +28,7 @@ import com.example.footbapp.viewmodel.EventViewModel;
 import com.example.footbapp.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.example.footbapp.Footbapp.CHANNEL_1_ID;
@@ -152,5 +155,9 @@ public class SettingsFragment extends Fragment {
                 .build();
 
         notificationManagerCompat.notify(1, notification);
+    }
+
+    private void scheduleAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
     }
 }
