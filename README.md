@@ -1,2 +1,2 @@
 # Footbapp
-Individual Assignment for Mobile Development Course
+A football schedule app for Android
